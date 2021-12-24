@@ -12,6 +12,13 @@ int main(void)
   if(curl) {
     curl_easy_setopt(curl, CURLOPT_URL, "https://www.esgi.fr/");
 
+ 
+  curl_global_init(CURL_GLOBAL_DEFAULT);
+ 
+  curl = curl_easy_init();
+  if(curl) {
+    curl_easy_setopt(curl, CURLOPT_URL, "https://www.esgi.fr/");
+ 
 #ifdef SKIP_PEER_VERIFICATION
     /*
      * If you want to connect to a site who is not using a certificate that is
@@ -26,16 +33,6 @@ int main(void)
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 #endif
 
-#ifdef SKIP_HOSTNAME_VERIFICATION
-    /*
-     * If the site you are connecting to uses a different host name that what
-     * they have mentioned in their server certificate's commonName (or
-     * subjectAltName) fields, libcurl will refuse to connect. You can skip
-     * this check, but this will make the connection less secure.
-     */
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-#endif
-
     /* Perform the request, res will get the return code */
     res = curl_easy_perform(curl);
     /* Check for errors */
@@ -48,6 +45,6 @@ int main(void)
   }
 
   curl_global_cleanup();
-
+ 
   return 0;
 }
