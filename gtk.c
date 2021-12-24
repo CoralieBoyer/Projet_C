@@ -1,14 +1,5 @@
 #include <gtk/gtk.h>
 
-static void
-print_hello (GtkWidget *widget,
-             gpointer   data)
-{
-  g_print ("Hello World\n");
-  GtkWidget *window = GTK_WIDGET(data);
-
-}
-
 static void gameWindow (GtkWidget *widget, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
   GtkWidget *principalBox;
@@ -53,8 +44,8 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBoxLeft), buttonYes_box);
 
   buttonYes = gtk_button_new_with_label ("OUI");
-//  g_signal_connect (buttonYes, "clicked", G_CALLBACK (callQuestion), gameBox); //APPELLE PAS LA BONNE FONCTION
-//  g_signal_connect_swapped (buttonYes, "clicked", G_CALLBACK (gtk_widget_destroy), question);
+  g_signal_connect (buttonYes, "clicked", G_CALLBACK (gameWindow), (gpointer)window);
+  g_signal_connect_swapped (buttonYes, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonYes_box), buttonYes);
 
   //BOUTON REPONSE NON
@@ -62,8 +53,8 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBoxLeft), buttonNo_box);
 
   buttonNo = gtk_button_new_with_label ("NON");
-//  g_signal_connect (buttonNo, "clicked", G_CALLBACK (pageJeu), NULL); //APPELLE PAS LA BONNE FONCTION
-//  g_signal_connect_swapped (buttonNo, "clicked", G_CALLBACK (gtk_widget_destroy), gameBox);
+  g_signal_connect (buttonNo, "clicked", G_CALLBACK (gameWindow), (gpointer)window);
+  g_signal_connect_swapped (buttonNo, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonNo_box), buttonNo);
 
   //LOGO
