@@ -42,7 +42,7 @@ void chose_table(int tables,char *table){
 }
 
 //main
-int main(int argc, char** argv) {
+int modifyWindow() {
 int tables;
 char table[50]="false";
 char menu;
@@ -103,3 +103,4 @@ int error;
   close_mysql();
     return 0;
 }
+

@@ -1,8 +1,5 @@
 GtkButton {
-background-image : url('Images/lixgreen_thumb.jpg');
-background-repeat : no-repeat;
-background-size : cover;
 font: Comic Sans 12;
+color: red;
 font-style: italic;
 }
-
