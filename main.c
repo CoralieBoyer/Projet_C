@@ -1,31 +1,105 @@
+//main ==>pour partie en ligne de commande
+
 #include <stdio.h>
 #include <mysql.h>
+#include "test_my_lib.c" //func sql
+#include <string.h>
 
+//prototype
+void chose_table(int tables,char *table);
 
+//func
+void chose_table(int tables,char *table){
+  switch(tables){
+   case 1:
+        strcpy(table,"AGE");
+        break;
+   case 2:
+        strcpy(table,"EMPLOYE");
+        break;
+   case 3:
+        strcpy(table,"ENTREPRISE");
+        break;
+   case 4:
+        strcpy(table,"FICHIER");
+        break;
+   case 5:
+        strcpy(table,"PHYSIQUE");
+        break;
+   case 6:
+        strcpy(table,"QUESTIONS");
+        break;
+   case 7:
+        strcpy(table,"TRAVAIL");
+        break;
+   case 8:
+        strcpy(table,"VISAGE");
+        break;
+   default:
+        printf("valeur inconnu, veuillez recommencer\n");
+        break;
+ };
+}
+
+//main
 int main(int argc, char** argv) {
+int tables;
+char table[50]="false";
+char menu;
+char next='a';
+int id;
+int error;
 
-    MYSQL mysql;
-    MYSQL_ROW row;
+  printf("Bienvenue dans le menu de modification \nIci, vous pouvez ajouter/modifier/supprimer une information");
 
-    mysql_init(&mysql);
-   // mysql_options(&mysql,MYSQL_READ_DEFAULT_GROUP,"your_prog_name");
-    if (!mysql_real_connect(&mysql,"localhost","usr","mdp","2vine_ki_C",0,NULL,0))
-    {
-        fprintf(stderr, "Failed to connect to database: Error: %s\n",
-                mysql_error(&mysql));
-    }
+   //connect bdd
+   connect_bdd();
 
-    mysql_query(&mysql,"SELECT * FROM entreprise");
-	MYSQL_RES * res = mysql_store_result(&mysql);
+  printf("\nvoici les TABLES modificables :\n ");
+  print_tables();//afficher tt les tables de la bdd
 
-    while((row = mysql_fetch_row(res))) {
-        for (int i=0 ; i < mysql_num_fields(res); i++) 
-            printf("%s\n",row[i]);
-    }
+  printf("\nQuelle table voulez-vous modifer ? \(entrez son numero)\n");
+  scanf("%d",&tables);
 
+  //switch pour select table
+  chose_table(tables,table);
 
-    mysql_free_result(res);
-    mysql_close(&mysql);
+  if(strstr(table,"false")==NULL){
+  printf("\nVous avez choisi la table %s. Continuez ? (o/n): ",table);
+  }else{
+  printf("Recommencer ou quitter (r/q): ");
+  }
 
+  scanf("\n%c",&next);
+
+  if(next == 'o'){
+ 	print_table(table);
+ 	printf("\nVoulez-vous ajouter (a),modifier (m) ou supprimer (s) un element ?: ");
+ 	scanf("\n%c",&menu);
+	if(menu == 's'){
+		printf("\nEntrez l'ID de l'element a supprimer: ");
+		scanf("%d",&id);
+		error = delete_element(table,id);
+		if(error !=0){
+			printf("erreur lors de la suppression\n");
+		}else{
+			printf("suppression reussie\n");
+		}
+	}else if(menu == 'a'){
+	insert_table(tables);
+	}
+ }else if(next == 'n'){
+	printf("Recommencer ou quitter (r/q): ");
+	scanf("\n%c",&next);
+ }
+/*
+   //insert
+   insert_entreprise();
+
+   //print * ENTREPRISE
+   print_entreprise();
+*/
+
+  close_mysql();
     return 0;
 }
