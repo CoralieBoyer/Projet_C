@@ -46,16 +46,16 @@ void close_mysql();//free pointer
 	void print_tables(){
 		int count=1;
 
-		mysql_query(&mysql,"SHOW TABLES");
-		MYSQL_RES * res = mysql_store_result(&mysql);
+		mysql_query(&mysql,"SHOW TABLES");// permit to do sql query => &mysql is pointer who ref at our bdd
+		MYSQL_RES * res = mysql_store_result(&mysql);//store result in res =>&mysql is pointer who ref at our bdd
 
     		while((row = mysql_fetch_row(res))) {
         		for (int i=0 ; i < mysql_num_fields(res); i++)
             			printf("\n \t\t %d) \t %s\n",count,row[i]);
 	    			count++;
-    		}
+    		}//print result to the request
 
-    		mysql_free_result(res);
+    		mysql_free_result(res);//emply the buffer
 	}
 
 	//print donnee de la table select
@@ -212,7 +212,7 @@ void close_mysql();//free pointer
 
 	//fermer connexion
 	void close_mysql(){
-		mysql_close(&mysql);
+		mysql_close(&mysql);//free the pointer /close connect
 	}
 //structure
 /*
