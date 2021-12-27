@@ -60,9 +60,8 @@ sprintf(sql_cmd,"SELECT MAX(ID) FROM QUESTIONS");
 mysql_query(&mysql,sql_cmd);
  MYSQL_RES * res = mysql_store_result(&mysql);
 while((row = mysql_fetch_row(res))) {
-max =(int)*row[0]-'0';
+max =*row[0]-'0';
   printf("%d\n",max);
-//printf("%s",typeof(mysql_fetch_row(res)));
  }
 mysql_free_result(res);
 
