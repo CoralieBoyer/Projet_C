@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <mysql.h>
 #include "test_my_lib.c" //func sql
+//#include "co_deco_sql.c"
 #include <string.h>
 
 //prototype
@@ -54,7 +55,7 @@ int error;
   printf("Ici, vous pouvez ajouter/modifier/supprimer une information\n");
 
    //connect bdd
-   connect_bdd();
+   //connect_bdd();
 
   printf("voici les TABLES modifiables :\n ");
   print_tables();//afficher tt les tables de la bdd
@@ -106,7 +107,7 @@ int error;
    print_entreprise();
 */
 
-  close_mysql();
+  //close_mysql();
     return 0;
 }
 

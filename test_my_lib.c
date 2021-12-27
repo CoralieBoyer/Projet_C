@@ -8,7 +8,7 @@
 
 //prototype
 void saisir(char* val,int size);
-void connect_bdd();//connexion bdd
+//void connect_bdd();//connexion bdd
 void print_tables();//print list des tables de bdd
 void print_table(char* table);//print donnee de la table select
 int  delete_element(char* table,int id);//suppr element de table
@@ -22,7 +22,7 @@ void insert_questions();
 void insert_travail();
 void insert_visage();
 
-void close_mysql();//free pointer
+//void close_mysql();//free pointer
 
 //func
 
@@ -35,7 +35,7 @@ void close_mysql();//free pointer
 
 
 	//connexion bdd
-	void connect_bdd(){
+/*	void connect_bdd(){
 		mysql_init(&mysql);
    		// mysql_options(&mysql,MYSQL_READ_DEFAULT_GROUP,"your_prog_name");
     		if (!mysql_real_connect(&mysql,"localhost","usr","mdp","2vine_ki_C",0,NULL,0))
@@ -43,7 +43,7 @@ void close_mysql();//free pointer
         		fprintf(stderr, "Failed to connect to database: Error: %s\n",
                 	mysql_error(&mysql));
     		}
-	}
+	}*/
 
 	//print liste des tables de bdd
 	void print_tables(){
@@ -214,10 +214,10 @@ void close_mysql();//free pointer
 
 
 
-	//fermer connexion
+/*	//fermer connexion
 	void close_mysql(){
 		mysql_close(&mysql);
-	}
+	}*/
 //structure
 /*
 Struct ENTREPRISE{

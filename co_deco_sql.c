@@ -18,7 +18,7 @@ void connect_bdd(){
                 {
                         fprintf(stderr, "Failed to connect to database: Error: %s\n",
                         mysql_error(&mysql));
-                }
+		}
 }
 
 

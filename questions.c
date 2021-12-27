@@ -11,7 +11,7 @@ int* var_table;
 //proto
 void malloc_variable();
 int describe_table();
-void printf_question();
+void printf_question(char *phrase);
 void free_variable();
 
 
@@ -19,7 +19,6 @@ void free_variable();
 void malloc_variable(){
 int count;
 
-connect_bdd();
 count = describe_table();
 var_table = malloc(sizeof(int)*count);
 if(var_table != NULL){
@@ -32,35 +31,6 @@ printf("erreur");
 }
 
 
-
-
-/*
-void answerRequest(){ //Recupere la personne pensée par le joueur
-int count;
-int* var_table;
-char questions[200];
-
-connect_bdd();
-
-count = describe_table();
-
-var_table = malloc(sizeof(int)*count);
-if(var_table != NULL){
-	for(int i=0;i<count;i++){
-	var_table[i]=0;
-	}
-	printf("%s",questions);
-	free(var_table);
-
-}else
-printf("erreur");
-
-
-
-
-close_mysql();
-}
-*/
 int describe_table(){
 int count=0;
                 mysql_query(&mysql,"desc QUESTIONS");
@@ -75,7 +45,7 @@ int count=0;
 
 }
 
-void printf_question(char *question){
+void printf_question(char *phrase){
 int id;
 int max;
 char sql_cmd[2000];
@@ -83,6 +53,7 @@ int count;
 int i=3;
 //char question[255];
 
+connect_bdd();
 
 srand(time(NULL));
 sprintf(sql_cmd,"SELECT MAX(ID) FROM QUESTIONS");
@@ -92,10 +63,10 @@ while((row = mysql_fetch_row(res))) {
 	max =*row[0]-'0';
  }
 mysql_free_result(res);
-
+printf("%d", max);
+/*
 do{
 	id = rand()%max+1;
-
 	sprintf(sql_cmd,"SELECT * FROM QUESTIONS WHERE ID = %d",id);
 	mysql_query(&mysql,sql_cmd);
 	res = mysql_store_result(&mysql);
@@ -103,8 +74,8 @@ do{
 
 }while(row == NULL);//refaire la requete si l'ID de la question n'existe pas
 
-	strcpy(question,row[1]);
-
+	strcpy(phrase,row[1]);
+printf("%s",phrase);
 /* 	eviter la repetition de question si rep OUI
 	while(i<mysql_num_fields(res)){
 		if(row[i] != NULL && var_table[i-3] == 0){
@@ -119,7 +90,7 @@ do{
 
 
 
-close_mysql();
+//close_mysql();
 }
 
 void free_variable(){
@@ -127,7 +98,7 @@ free(var_table);
 }
 
 
-int main(int argc,char** argv){
+/*int main(int argc,char** argv){
 char question[255];
 
 malloc_variable();
@@ -136,4 +107,4 @@ printf("%s",question);
 
 free_variable();
 return 0;
-}
+}*/
