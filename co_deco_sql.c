@@ -11,6 +11,8 @@ void connect_bdd();
 void close_mysql();
 
 //func
+
+/* CONNEXION A LA BDD*/
 void connect_bdd(){
                 mysql_init(&mysql);
                 // mysql_options(&mysql,MYSQL_READ_DEFAULT_GROUP,"your_prog_name");
@@ -22,7 +24,7 @@ void connect_bdd(){
 }
 
 
-//fermer connexion
+/* FERMER LA CONNEXION */
 void close_mysql(){
    mysql_close(&mysql);
 

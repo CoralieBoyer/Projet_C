@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "main.c"
 #include "questions.c"
-//#include "co_deco_sql.c"
+#include "co_deco_sql.c"
 
 static void gameWindow (GtkWidget *widget, gpointer data);
 static void homeWindow (GtkWidget *widget, gpointer data);
@@ -54,7 +54,6 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   buttonQuit = gtk_button_new_with_label ("Quitter");
   g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
   g_signal_connect (buttonQuit, "clicked", G_CALLBACK (free_variable), NULL);
-  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (close_mysql), NULL);
   g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonQuit_box), buttonQuit);
   gtk_widget_set_size_request(buttonQuit,300,50);
@@ -86,7 +85,6 @@ static void gameWindow (GtkWidget *widget, gpointer data){
 
   char phrase[255];
   printf_question(phrase);
-//  printf("%s",phrase);
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
   gtk_container_add(GTK_CONTAINER(window), principalBox);
@@ -108,7 +106,7 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_widget_set_margin_start(verticalBoxRight,75); //AJOUT DE MARGE A GAUCHE
 
   //QUESTION
-  question=gtk_label_new("phrase");
+  question=gtk_label_new(phrase);
   gtk_container_add(GTK_CONTAINER(verticalBoxLeft), question);
 
   //BOUTON REPONSE OUI
@@ -234,15 +232,16 @@ static void activate (GtkApplication *app, gpointer user_data){
 }
 
 int main (int argc, char **argv){
+  connect_bdd();
+
   GtkApplication *app;
   int status;
-
-  //connect_bdd();
 
   app = gtk_application_new (NULL, G_APPLICATION_FLAGS_NONE);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
+  close_mysql();
   return status;
 }
