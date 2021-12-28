@@ -5,8 +5,9 @@
 #include <time.h>
 #include <stdlib.h>
 
-int* var_table;
-
+//var
+char* var_table;
+int i;
 
 //proto
 void malloc_variable();
@@ -55,8 +56,7 @@ void printf_question(char *phrase){
 	int max;
 	char sql_cmd[2000];
 	int count;
-	int i=3;
-	//char question[255];
+	char question[255];
 
 	//ID RANDOM
 	srand(time(NULL));
@@ -70,33 +70,33 @@ void printf_question(char *phrase){
 
 	//SELECT QUESTION DE L'ID RANDOM
 	do{
-		id = rand()%max+1;
-		sprintf(sql_cmd,"SELECT * FROM QUESTIONS WHERE ID = %d",id);
-		mysql_query(&mysql,sql_cmd);
-		res = mysql_store_result(&mysql);
-		row = mysql_fetch_row(res);
-	}while(row == NULL);//refaire la requete si l'ID de la question n'existe pas
+		do{
+			id = rand()%max+1;
+			sprintf(sql_cmd,"SELECT * FROM QUESTIONS WHERE ID = %d",id);
+			mysql_query(&mysql,sql_cmd);
+			res = mysql_store_result(&mysql);
+			row = mysql_fetch_row(res);
+		}while(row == NULL);//refaire la requete si l'ID de la question n'existe pas
 
-	strcpy(phrase,row[1]);
+		i = 3; //i[0]->ID / i[1]->phrase / i[2]->ID_employe
+		strcpy(question,row[1]);
+		while(row[i] == NULL && i<mysql_num_fields(res))
+			++i;
+		mysql_free_result(res);//Free de la requete de la question
+		i-=3;
+	}while(var_table[i] != 0);//Refaire la requete si une question a deja ete pose
 
-/* 	eviter la repetition de question si rep OUI
-	while(i<mysql_num_fields(res)){
-		if(row[i] != NULL && var_table[i-3] == 0){
-			var_table[i-3] = 1;
-			strcpy(question,row[1]);
-		}
-		i++;
-	}
-*/
-	mysql_free_result(res);//Free de la requete de la question
+	strcpy(phrase,question);
+}
 
+void response_yes(){
+	*(var_table+i)+=1;
 }
 
 /* FREE DU TABLEAU CONTENANT LES REPETITIONS DE QUESTIONS */
 void free_variable(){
-free(var_table);
+	free(var_table);
 }
-
 
 /* FONCTION MAIN UTILISEE POUR LES TESTS */
 /*int main(int argc,char** argv){
@@ -110,4 +110,5 @@ printf("question : %s\n",question);
 free_variable();
 close_mysql();
 return 0;
-}*/
+}
+*/
