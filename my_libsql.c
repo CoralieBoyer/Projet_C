@@ -15,6 +15,7 @@ void clean_stdin();//remplace fflush
 void printf_tables();
 void choose_table(char* name_table);
 void delete_element(char* name_table);
+void insert_element(char* name_table);
 
 //func
 
@@ -118,4 +119,17 @@ int id;
 			printf("suppression effectuee avec succes");
   	}
 
+}
+
+void insert_element(char* name_table){
+		char sql_cmd[2000];
+		sprintf(sql_cmd,"DESC %s",name_table);
+                mysql_query(&mysql,sql_cmd);
+                MYSQL_RES * res = mysql_store_result(&mysql);
+                printf("champs de la table:\n");
+                while((row = mysql_fetch_row(res))) {
+                        for (int i=0 ; i < mysql_num_fields(res); i++)
+                                printf("%d : %s\n",i,row[i]);
+                }
+                mysql_free_result(res);
 }
