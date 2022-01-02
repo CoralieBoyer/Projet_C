@@ -1,12 +1,29 @@
 #include <gtk/gtk.h>
 #include "main.c"
+
+//struct
+typedef struct Item {
+    int value;
+    struct Item * next;
+} IdQuestion;
+
+IdQuestion * start = NULL; //POINTEUR POUR STRUCT QUESTION
+
+
 #include "questions.c"
 #include "co_deco_sql.c"
+
+//struct
+/*typedef struct Item {
+    int value;
+    struct Item * next;
+} IdQuestion;*/
 
 //var
 //int* var_table;
 int pagePause = 0;
 char phrase[255];
+
 
 //proto
 static void gameWindow (GtkWidget *widget, gpointer data);
@@ -77,6 +94,11 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   gtk_widget_show_all(principalBox);
 }
 
+static void noRepeatQuestions(GtkWidget *widget, gpointer data){
+  start = response_no(start);
+  printItems(start);
+}
+
 static void gameWindow (GtkWidget *widget, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
   GtkWidget *principalBox;
@@ -136,6 +158,7 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBoxLeft), buttonNo_box);
 
   buttonNo = gtk_button_new_with_label ("NON");
+  g_signal_connect (buttonNo, "clicked", G_CALLBACK (noRepeatQuestions), NULL);
   g_signal_connect (buttonNo, "clicked", G_CALLBACK (gameWindow), (gpointer)window);
   g_signal_connect_swapped (buttonNo, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonNo_box), buttonNo);
@@ -262,5 +285,6 @@ int main (int argc, char **argv){
   g_object_unref (app);
 
   close_mysql();
+  free(start);
   return status;
 }

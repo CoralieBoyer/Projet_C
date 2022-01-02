@@ -5,18 +5,45 @@
 #include <time.h>
 #include <stdlib.h>
 
+//liste chainee
+/*typedef struct Item {
+    int value;
+    struct Item * next;
+} IdQuestion;
+*/
+
 //var
 char* var_table;
 int i;
+int id;
+int boolean;
+
+//IdQuestion *start = NULL;
+
 
 //proto
 void malloc_variable();
 int describe_table();
 void printf_question(char *phrase);
 void free_variable();
+IdQuestion * addId(int newValue, IdQuestion *pStart);
+void searchId(IdQuestion *pStart);
+
+//pointeur func
+//void (*pSearchId)(IdQuestion *);
+//void * pSearchId = searchId;
 
 
 //func
+
+void printItems(IdQuestion *pStart) {
+    IdQuestion *tmp;
+    tmp = pStart;
+    while(tmp != NULL) {
+        printf("%d\n", tmp->value);
+        tmp = tmp->next;
+    }
+}
 
 /* MALLOC DU TABLEAU CONTENANT LES REPETITIONS DE QUESTIONS */
 void malloc_variable(){
@@ -52,7 +79,6 @@ int describe_table(){
 
 /* RECUPERE UNE QUESTION RANDOM */
 void printf_question(char *phrase){
-	int id;
 	int max;
 	char sql_cmd[2000];
 	int count;
@@ -84,7 +110,9 @@ void printf_question(char *phrase){
 			++i;
 		mysql_free_result(res);//Free de la requete de la question
 		i-=3;
-	}while(var_table[i] != 0);//Refaire la requete si une question a deja ete pose
+		searchId(start);
+		printf("B: %d\n", boolean);
+	}while(var_table[i] != 0 && boolean == 0);//Refaire la requete si une question a deja ete pose
 
 	strcpy(phrase,question);
 }
@@ -93,10 +121,31 @@ void response_yes(){
 	*(var_table+i)+=1;
 }
 
+IdQuestion * response_no(IdQuestion *pStart) {
+    IdQuestion *tmp;
+    tmp = malloc(sizeof(IdQuestion));
+    tmp->value = id;
+    tmp->next = pStart;
+    return tmp;
+}
+
+
 /* FREE DU TABLEAU CONTENANT LES REPETITIONS DE QUESTIONS */
 void free_variable(){
 	free(var_table);
 }
+
+void searchId(IdQuestion *pStart) {
+    IdQuestion *tmp;
+    tmp = pStart;
+    while(tmp != NULL) {
+	if(tmp->value == id)
+		boolean = 0;
+	tmp = tmp->next;
+    }
+    boolean = 1;
+}
+
 
 /* FONCTION MAIN UTILISEE POUR LES TESTS */
 /*int main(int argc,char** argv){
@@ -106,6 +155,11 @@ connect_bdd();
 malloc_variable();
 printf_question(question);
 printf("question : %s\n",question);
+
+start = response_no(start);
+
+//printIds(start);
+free(start);
 
 free_variable();
 close_mysql();
