@@ -5,6 +5,8 @@
 
 //var
 //int* var_table;
+int pagePause = 0;
+char phrase[255];
 
 //proto
 static void gameWindow (GtkWidget *widget, gpointer data);
@@ -23,6 +25,8 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   GtkWidget *buttonQuit;
   GtkWidget *buttonQuit_box;
   GtkWidget *title;
+
+  pagePause = 1;
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
@@ -89,8 +93,10 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   GtkWidget *buttonPause_box;
   GtkWidget *buttonPause;
 
-  char phrase[255];
-  printf_question(phrase);
+  if(pagePause == 0)
+    printf_question(phrase);
+
+  pagePause = 0;
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
