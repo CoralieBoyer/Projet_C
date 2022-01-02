@@ -1,3 +1,4 @@
+
 #include <gtk/gtk.h>
 #include "./main.c"
 
@@ -60,7 +61,6 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   gtk_container_add(GTK_CONTAINER(principalBox), title);
   gtk_widget_set_margin_top(title,10); //AJOUT DE MARGE EN HAUT
 //  gtk_widget_set_size_request(title,300,50); //TAILLE
-
 
   gtk_widget_show_all(principalBox);
 }
@@ -138,6 +138,12 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_widget_show_all(principalBox);
 }
 
+static void close_window (GtkWidget *widget, gpointer data){
+  GtkWidget *window = GTK_WIDGET(data);
+//  gtk_widget_hide(window);
+  modifyWindow();
+}
+
 static void homeWindow (GtkWidget *THEwindow, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
   GtkWidget *title;
@@ -189,8 +195,8 @@ static void homeWindow (GtkWidget *THEwindow, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBox), buttonModify_box);
 
   buttonModify = gtk_button_new_with_label ("MODIFIER");
-  g_signal_connect (buttonModify, "clicked", G_CALLBACK (modifyWindow), NULL);
-  g_signal_connect_swapped (buttonModify, "clicked", G_CALLBACK (gtk_widget_destroy), THEwindow);
+  g_signal_connect (buttonModify, "clicked", G_CALLBACK (close_window), THEwindow);
+//  g_signal_connect (buttonModify, "clicked", G_CALLBACK (modifyWindow), NULL);
   gtk_container_add (GTK_CONTAINER (buttonModify_box), buttonModify);
   gtk_widget_set_size_request(buttonModify,300,50);
 
