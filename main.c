@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <mysql.h>
 #include "test_my_lib.c" //func sql
+//#include "co_deco_sql.c"
 #include <string.h>
 
 //prototype
@@ -50,32 +51,37 @@ char next='a';
 int id;
 int error;
 
-  printf("Bienvenue dans le menu de modification \nIci, vous pouvez ajouter/modifier/supprimer une information");
+  printf("Bienvenue dans le menu de modification\n");
+  printf("Ici, vous pouvez ajouter/modifier/supprimer une information\n");
 
    //connect bdd
-   connect_bdd();
+   //connect_bdd();
 
-  printf("\nvoici les TABLES modificables :\n ");
+  printf("voici les TABLES modifiables :\n ");
   print_tables();//afficher tt les tables de la bdd
 
-  printf("\nQuelle table voulez-vous modifer ? \(entrez son numero)\n");
+  printf("Quelle table voulez-vous modifer ? (entrez son numero)\n ");
+  fflush(stdin);
   scanf("%d",&tables);
 
   //switch pour select table
   chose_table(tables,table);
 
   if(strstr(table,"false")==NULL){
-  printf("\nVous avez choisi la table %s. Continuez ? (o/n): ",table);
-  }else{
+  printf("Vous avez choisi la table %s. Continuez ? (o/n): ",table);
+  fflush(stdin);
+}else{
   printf("Recommencer ou quitter (r/q): ");
   }
-
+  fflush(stdin);
   scanf("\n%c",&next);
+  fflush(stdin);
 
   if(next == 'o'){
  	print_table(table);
  	printf("\nVoulez-vous ajouter (a),modifier (m) ou supprimer (s) un element ?: ");
  	scanf("\n%c",&menu);
+	fflush(stdin);
 	if(menu == 's'){
 		printf("\nEntrez l'ID de l'element a supprimer: ");
 		scanf("%d",&id);
@@ -86,11 +92,12 @@ int error;
 			printf("suppression reussie\n");
 		}
 	}else if(menu == 'a'){
+	fflush(stdin);
 	insert_table(tables);
 	}
  }else if(next == 'n'){
 	printf("Recommencer ou quitter (r/q): ");
-	scanf("\n%c",&next);
+	scanf("%c",&next);
  }
 /*
    //insert
@@ -100,7 +107,7 @@ int error;
    print_entreprise();
 */
 
-  close_mysql();
+  //close_mysql();
     return 0;
 }
 
