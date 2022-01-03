@@ -36,15 +36,6 @@ void searchId(IdQuestion *pStart);
 
 //func
 
-void printItems(IdQuestion *pStart) {
-    IdQuestion *tmp;
-    tmp = pStart;
-    while(tmp != NULL) {
-        printf("%d\n", tmp->value);
-        tmp = tmp->next;
-    }
-}
-
 /* MALLOC DU TABLEAU CONTENANT LES REPETITIONS DE QUESTIONS */
 void malloc_variable(){
 	int count;
@@ -111,16 +102,17 @@ void printf_question(char *phrase){
 		mysql_free_result(res);//Free de la requete de la question
 		i-=3;
 		searchId(start);
-		printf("B: %d\n", boolean);
-	}while(var_table[i] != 0 && boolean == 0);//Refaire la requete si une question a deja ete pose
+	}while(var_table[i] != 0 || boolean == 0);//Refaire la requete si une question a deja ete pose
 
 	strcpy(phrase,question);
 }
 
+/* SI REP OUI */
 void response_yes(){
 	*(var_table+i)+=1;
 }
 
+/* SI REP NON*/
 IdQuestion * response_no(IdQuestion *pStart) {
     IdQuestion *tmp;
     tmp = malloc(sizeof(IdQuestion));
@@ -129,23 +121,32 @@ IdQuestion * response_no(IdQuestion *pStart) {
     return tmp;
 }
 
-
-/* FREE DU TABLEAU CONTENANT LES REPETITIONS DE QUESTIONS */
-void free_variable(){
-	free(var_table);
-}
-
+/* EVITE LA REPETITION DES QUESTIONS QUAND NON */
 void searchId(IdQuestion *pStart) {
     IdQuestion *tmp;
     tmp = pStart;
-    while(tmp != NULL) {
-	if(tmp->value == id)
-		boolean = 0;
-	tmp = tmp->next;
-    }
     boolean = 1;
+    while(tmp != NULL) {
+        if(tmp->value == id)
+                boolean = 0;
+        tmp = tmp->next;
+    }
 }
 
+/* VIDE LES REPETITIONS DE QUESTIONS QUAND NON*/
+IdQuestion * deleteIds(IdQuestion *pStart) {
+    while(pStart != NULL){
+    IdQuestion *tmp = pStart->next;
+    free(pStart);
+    pStart = tmp;
+    }
+    return pStart; // ou return tmp;
+}
+
+/* FREE DU TABLEAU CONTENANT LES REPETITIONS DE QUESTIONS OUI*/
+void free_variable(){
+	free(var_table);
+}
 
 /* FONCTION MAIN UTILISEE POUR LES TESTS */
 /*int main(int argc,char** argv){

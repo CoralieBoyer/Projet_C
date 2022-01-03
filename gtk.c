@@ -31,6 +31,11 @@ static void homeWindow (GtkWidget *widget, gpointer data);
 
 //func
 
+static void quit (GtkWidget *widget, gpointer data){
+  free_variable();
+  start = deleteIds(start);
+}
+
 static void pauseWindow (GtkWidget *widget, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
   GtkWidget *principalBox;
@@ -80,7 +85,7 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
 
   buttonQuit = gtk_button_new_with_label ("Quitter");
   g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
-  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (free_variable), NULL);
+  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
   g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonQuit_box), buttonQuit);
   gtk_widget_set_size_request(buttonQuit,300,50);
@@ -96,7 +101,6 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
 
 static void noRepeatQuestions(GtkWidget *widget, gpointer data){
   start = response_no(start);
-  printItems(start);
 }
 
 static void gameWindow (GtkWidget *widget, gpointer data){
