@@ -122,14 +122,61 @@ int id;
 }
 
 void insert_element(char* name_table){
+char** champs;
+char** type;
+int count=0;
+char** value;
 		char sql_cmd[2000];
 		sprintf(sql_cmd,"DESC %s",name_table);
                 mysql_query(&mysql,sql_cmd);
                 MYSQL_RES * res = mysql_store_result(&mysql);
                 printf("champs de la table:\n");
+		row = mysql_fetch_row(res);
                 while((row = mysql_fetch_row(res))) {
-                        for (int i=0 ; i < mysql_num_fields(res); i++)
+                        for (int i=0 ; i < 2; i++)
                                 printf("%d : %s\n",i,row[i]);
-                }
+                count++;
+		}
+
+champs = malloc(sizeof(char*)*count);
+type = malloc(sizeof(char*)*count);
+value =malloc(sizeof(char*)*count);
+int j=0;
+		sql_cmd[2000];
+
+                sprintf(sql_cmd,"DESC %s",name_table);
+                mysql_query(&mysql,sql_cmd);
+                res = mysql_store_result(&mysql);
+                row = mysql_fetch_row(res);
+                while((row = mysql_fetch_row(res))) {
+		for (int i=0 ; i < count; i+=2){
+		champs[j]=malloc(sizeof(char)*strlen(row[i]));
+		strcpy(champs[j],row[i]);
+
+		type[j]=malloc(sizeof(char)*strlen(row[i+1]));
+		strcpy(type[j],row[i+1]);
+
+		clean_stdin();
+		value[j]=malloc(sizeof(char)*255);
+		my_fgets(value[j],255);
+		printf("%d",j);
+		printf("%s\n",value[j]);
+
+
+                free(champs[j]);
+		free(type[j]);
+		free(value[j]);
+		}
+		j++;
+		}
+free(champs);
+free(type);
+free(value);
+/*
+for(int i=0;i<count;i++){
+printf("%s",champs[count]);
+}*/
+
+//insert into table(param,...) value(...)
                 mysql_free_result(res);
 }
