@@ -1,8 +1,8 @@
-#include <gtk/gtk.h>
+//#include <gtk/gtk.h>
 #include "main.c"
 
 //struct
-typedef struct Item {
+/*typedef struct Item {
     int value;
     struct Item * next;
 } IdQuestion;
@@ -12,7 +12,7 @@ IdQuestion * start = NULL; //POINTEUR POUR STRUCT QUESTION
 
 #include "questions.c"
 #include "co_deco_sql.c"
-
+*/
 //struct
 /*typedef struct Item {
     int value;
@@ -21,9 +21,9 @@ IdQuestion * start = NULL; //POINTEUR POUR STRUCT QUESTION
 
 //var
 //int* var_table;
-int pagePause = 0;
+/*int pagePause = 0;
 char phrase[255];
-
+*/
 
 //proto
 static void gameWindow (GtkWidget *widget, gpointer data);
@@ -277,11 +277,10 @@ static void activate (GtkApplication *app, gpointer user_data){
   homeWindow(window,box);
 }
 
-int main (int argc, char **argv){
+int play(int status, int argc, char **argv){
   connect_bdd();
 
   GtkApplication *app;
-  int status;
 
   app = gtk_application_new (NULL, G_APPLICATION_FLAGS_NONE);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
