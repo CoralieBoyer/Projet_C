@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-  MYSQL mysql;
-  MYSQL_ROW row;
+//  MYSQL mysql;
+//  MYSQL_ROW row;
 
 
 //proto

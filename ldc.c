@@ -1,19 +1,9 @@
-#include <string.h>
-#include <mysql.h>
-#include <stdlib.h>
-#include <stdio.h>
 
-#include "my_libsql.c"
-#include "co_deco_sql.c"
-
-
-int main(int argc,char** argv){
+void backOffice(){
 //var
 char name_table[10];
 char next;
 int error;
-
-connect_bdd();
 
 printf("Bienvenue dans le menu de modification \n");
 printf("Ici, vous pouvez ajouter/modifier/supprimer une information \n");
@@ -39,7 +29,7 @@ if(next == 'm'){
 			clean_stdin();
 			scanf("%c",&next);
 			if(next == 'q')
-                        	return 0;
+                        	return;
 			if(next == 'c')
 				break;
 		}while(next != 'q' || next != 'c');
@@ -72,6 +62,4 @@ if(next == 'm'){
 else if(next =='a'){
 	printf("ajout de table \n");
 }
-close_mysql();
-return 0;
 }
