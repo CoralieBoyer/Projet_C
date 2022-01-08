@@ -126,52 +126,64 @@ char** champs;
 char** type;
 int count=0;
 char** value;
+int i = 0;
+
 		char sql_cmd[2000];
 		sprintf(sql_cmd,"DESC %s",name_table);
                 mysql_query(&mysql,sql_cmd);
                 MYSQL_RES * res = mysql_store_result(&mysql);
-                printf("champs de la table:\n");
 		row = mysql_fetch_row(res);
                 while((row = mysql_fetch_row(res))) {
-                        for (int i=0 ; i < 2; i++)
-                                printf("%d : %s\n",i,row[i]);
                 count++;
 		}
 
 champs = malloc(sizeof(char*)*count);
 type = malloc(sizeof(char*)*count);
-value =malloc(sizeof(char*)*count);
-int j=0;
-		sql_cmd[2000];
+value = malloc(sizeof(char*)*count);
 
-                sprintf(sql_cmd,"DESC %s",name_table);
-                mysql_query(&mysql,sql_cmd);
-                res = mysql_store_result(&mysql);
-                row = mysql_fetch_row(res);
-                while((row = mysql_fetch_row(res))) {
-		for (int i=0 ; i < count; i+=2){
-		champs[j]=malloc(sizeof(char)*strlen(row[i]));
-		strcpy(champs[j],row[i]);
+	sql_cmd[2000];
+        sprintf(sql_cmd,"DESC %s",name_table);
+        mysql_query(&mysql,sql_cmd);
+        res = mysql_store_result(&mysql);
+        row = mysql_fetch_row(res);
 
-		type[j]=malloc(sizeof(char)*strlen(row[i+1]));
-		strcpy(type[j],row[i+1]);
+	clean_stdin(); //Vider le cash
+        printf("\nInserez les informations que vous voulez ajouter (écrire NULL si vous ne voulez pas mettre quelque chose):\n");
+	while((row = mysql_fetch_row(res))) { //ranger les noms et types des lignes + insertion par le user
 
-		clean_stdin();
-		value[j]=malloc(sizeof(char)*255);
-		my_fgets(value[j],255);
-		printf("%d",j);
-		printf("%s\n",value[j]);
+		champs[i]=malloc(sizeof(char)*strlen(row[0])); //noms des lignes
+		strcpy(champs[i],row[0]);
 
+		type[i]=malloc(sizeof(char)*strlen(row[1])); // types des lignes
+		strcpy(type[i],row[1]);
 
-                free(champs[j]);
-		free(type[j]);
-		free(value[j]);
+		printf("%s : %s\n",row[0],row[1]);
+
+		value[i]=malloc(sizeof(char)*255); //valeurs a inserer
+		my_fgets(value[i],255);
+
+		i++;
 		}
-		j++;
+
+	printf("At\n"); //VERIF
+	for (int i = 0; i < count; i++){ //VERIF
+		printf("Value %d : %s\n",i, value[i]);
+        }
+
+	//free des tableaux dynamiques
+	for (int i = 0; i < count; i++){
+		free(value[i]);
+	}
+	while((row = mysql_fetch_row(res))) {
+		for (int j = 0; j < 2; j++){
+			free(champs[j]);
+			free(type[j]);
 		}
-free(champs);
-free(type);
-free(value);
+	}
+	free(champs);
+	free(type);
+	free(value);
+
 /*
 for(int i=0;i<count;i++){
 printf("%s",champs[count]);
