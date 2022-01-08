@@ -58,7 +58,7 @@ if(next == 'm'){
 				insert_element(name_table);
 				break;
 			case 'm':
-				printf("m \n");
+				modify_element(name_table);
 				break;
 			case 's':
                         	delete_element(name_table);

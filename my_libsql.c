@@ -16,6 +16,7 @@ void printf_tables();
 void choose_table(char* name_table);
 void delete_element(char* name_table);
 void insert_element(char* name_table);
+void modify_element(char* name_table);
 
 //func
 
@@ -149,7 +150,7 @@ void insert_element(char* name_table){
         row = mysql_fetch_row(res);
 
 	clean_stdin(); //Vider le cash
-        printf("\nInserez les informations que vous voulez ajouter (écrire NULL si vous ne voulez pas mettre quelque chose):\n");
+        printf("\nInserez les informations que vous voulez ajouter:\n");
 	while((row = mysql_fetch_row(res))) { //ranger les noms des lignes + insertion par le user
 		strcat(champs,row[0]); //noms des lignes
 		strcat(champs,",");
@@ -167,6 +168,7 @@ void insert_element(char* name_table){
 	}
         champs[strlen(champs)-1]= '\0'; //enlever la derniere virgule
         value[strlen(value)-1]= '\0'; //enlever la derniere virgule
+
 	//free des tableaux dynamiques
 	for (int i = 0; i < count; i++){
 		free(tmp[i]);
@@ -186,4 +188,46 @@ void insert_element(char* name_table){
                 printf("insersion effectuee avec succes\n");
 
         mysql_free_result(res);
+}
+
+void modify_element(char* name_table){
+	int id;
+	char champs[255] = "";
+        char tmp[255] = "";
+	char value[255] = "";
+
+	printf("Entrez l'ID de l'element a modifier \n"); //ligne a modifier
+        clean_stdin();
+        scanf("%d",&id);
+
+	printf("Voici le nom des lignes :\n");
+        printf("Nom : | Type :\n");
+	char sql_cmd[2000];
+        sprintf(sql_cmd,"DESC %s",name_table);
+        mysql_query(&mysql,sql_cmd);
+        MYSQL_RES * res = mysql_store_result(&mysql);
+        row = mysql_fetch_row(res);
+        while((row = mysql_fetch_row(res)))
+                printf("%s | %s\n",row[0], row[1]);
+
+	printf("Entrez le nom de la ligne a modifier\n");
+        clean_stdin();
+	my_fgets(champs,255);
+
+        printf("Entrez la nouvelle valeur\n");
+        my_fgets(tmp,255);
+        strcat(value,"'");
+        strcat(value,tmp);
+        strcat(value,"'");
+
+        sql_cmd[2000];
+        sprintf(sql_cmd,"UPDATE %s SET %s=%s where id=%d",name_table,champs,value,id);
+        mysql_query(&mysql,sql_cmd);
+
+        if((long) mysql_affected_rows(&mysql) == 0) //cas d'erreur
+                printf("aucune information modifier\n");
+        else if((long) mysql_affected_rows(&mysql) == -1)
+                printf("erreur lors de la modification\n");
+        else
+              printf("modification effectuee avec succes\n");
 }
