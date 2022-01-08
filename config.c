@@ -30,7 +30,6 @@ MYSQL_ROW row; //co_deco_sql.c
 #include "gtk.c"
 //Ajouter les fichiers de modif
 
-
 int main (int argc, char **argv){
   int status;
   play(status, argc, argv);
