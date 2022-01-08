@@ -53,13 +53,18 @@ ET
 BT
 /F1 10 Tf
 0 460 Td
-(Test) Tj
+(Ceci est une question ?) Tj
+ET
+BT
+/F1 10 Tf
+0 450 Td
+(oui) Tj
 ET
 
 endstream
 endobj
 7 0 obj
-76
+129
 endobj
 xref
 0 8
@@ -70,7 +75,7 @@ xref
 0000000184 00000 n
 0000000283 00000 n
 0000000459 00000 n
-0000000589 00000 n
+0000000642 00000 n
 trailer
 <<
 /Root 1 0 R
@@ -78,5 +83,5 @@ trailer
 /Size 8
 >>
 startxref
-607
+661
 %%EOF

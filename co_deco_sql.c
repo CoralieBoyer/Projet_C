@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-  MYSQL mysql;
-  MYSQL_ROW row;
+//  MYSQL mysql;
+//  MYSQL_ROW row;
 
 
 //proto
@@ -22,7 +22,6 @@ void connect_bdd(){
                         mysql_error(&mysql));
 		}
 }
-
 
 /* FERMER LA CONNEXION */
 void close_mysql(){
