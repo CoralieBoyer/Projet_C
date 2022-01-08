@@ -11,11 +11,8 @@ void connect_bdd();
 void close_mysql();
 
 //func
-<<<<<<< HEAD
 
 /* CONNEXION A LA BDD*/
-=======
->>>>>>> annaelle
 void connect_bdd(){
                 mysql_init(&mysql);
                 // mysql_options(&mysql,MYSQL_READ_DEFAULT_GROUP,"your_prog_name");
@@ -23,19 +20,11 @@ void connect_bdd(){
                 {
                         fprintf(stderr, "Failed to connect to database: Error: %s\n",
                         mysql_error(&mysql));
-<<<<<<< HEAD
 		}
 }
 
 
 /* FERMER LA CONNEXION */
-=======
-                }
-}
-
-
-//fermer connexion
->>>>>>> annaelle
 void close_mysql(){
    mysql_close(&mysql);
 

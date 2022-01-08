@@ -1,5 +1,5 @@
 //#include <gtk/gtk.h>
-#include "main.c"
+//#include "main.c"
 
 //struct
 /*typedef struct Item {
@@ -28,7 +28,6 @@ char where[1000]="";
 /*int pagePause = 0;
 char phrase[255];
 */
-
 //proto
 static void gameWindow (GtkWidget *widget, gpointer data);
 static void homeWindow (GtkWidget *widget, gpointer data);
@@ -401,7 +400,7 @@ int ok;
 static void close_window (GtkWidget *widget, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
 //  gtk_widget_hide(window);
-  modifyWindow();
+  backOffice();
 }
 
 static void homeWindow (GtkWidget *THEwindow, gpointer data){
@@ -457,7 +456,7 @@ static void homeWindow (GtkWidget *THEwindow, gpointer data){
 
   buttonModify = gtk_button_new_with_label ("MODIFIER");
   g_signal_connect (buttonModify, "clicked", G_CALLBACK (close_window), THEwindow);
-//  g_signal_connect (buttonModify, "clicked", G_CALLBACK (modifyWindow), NULL);
+//  g_signal_connect (buttonModify, "clicked", G_CALLBACK (backOffice), NULL);
   gtk_container_add (GTK_CONTAINER (buttonModify_box), buttonModify);
   gtk_widget_set_size_request(buttonModify,300,50);
 
