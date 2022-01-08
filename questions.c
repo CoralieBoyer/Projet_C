@@ -17,7 +17,9 @@ char* var_table;
 int i;
 int id;
 int boolean;
-
+char id_fk[25]="";
+char where[1000]="";
+char id_element[5]="";
 //IdQuestion *start = NULL;
 
 
@@ -28,6 +30,7 @@ void printf_question(char *phrase);
 void free_variable();
 IdQuestion * addId(int newValue, IdQuestion *pStart);
 void searchId(IdQuestion *pStart);
+void requete();
 
 //pointeur func
 //void (*pSearchId)(IdQuestion *);
@@ -68,6 +71,10 @@ int describe_table(){
 	return result;
 }
 
+void perdu(){
+printf("ok");
+}
+
 /* RECUPERE UNE QUESTION RANDOM */
 void printf_question(char *phrase){
 	int max;
@@ -75,9 +82,10 @@ void printf_question(char *phrase){
 	int count;
 	char question[255];
 
+
 	//ID RANDOM
 	srand(time(NULL));
-	sprintf(sql_cmd,"SELECT MAX(ID) FROM QUESTIONS");
+	sprintf(sql_cmd,"SELECT MAX(ID)FROM QUESTIONS");
 	mysql_query(&mysql,sql_cmd);
 	MYSQL_RES * res = mysql_store_result(&mysql);
 	while((row = mysql_fetch_row(res))) {
@@ -99,17 +107,64 @@ void printf_question(char *phrase){
 		strcpy(question,row[1]);
 		while(row[i] == NULL && i<mysql_num_fields(res))
 			++i;
+		strcpy(id_element,row[i]);
 		mysql_free_result(res);//Free de la requete de la question
 		i-=3;
 		searchId(start);
 	}while(var_table[i] != 0 || boolean == 0);//Refaire la requete si une question a deja ete pose
-
 	strcpy(phrase,question);
 }
 
 /* SI REP OUI */
 void response_yes(){
+		switch (i+3){
+                        case 3:
+				strcpy(id_fk,"ID_TRAVAIL");
+                                break;
+                        case 4:
+				strcpy(id_fk,"ID_SEXE");
+                                break;
+                        case 5:
+				strcpy(id_fk,"ID_YEUX");
+                                break;
+                        case 6:
+				strcpy(id_fk,"ID_CHEVEUX");
+                                break;
+                        case 7:
+				strcpy(id_fk,"ID_AGE");
+                                break;
+                        case 8:
+				strcpy(id_fk,"ID_TAILLE");
+                                break;
+                        case 9:
+				strcpy(id_fk,"ID_PILOSITE");
+                                break;
+                };
+
+	printf("%s\n",id_fk);
+	requete();
 	*(var_table+i)+=1;
+}
+
+void requete(){
+char sql_cmd[2000];
+//printf("%s\n",id_element);
+			if(strlen(where)!=0){
+			strcat(where,"AND");
+			}
+			strcat(where,id_fk);
+			strcat(where,"=");
+			strcat(where,id_element);
+			sprintf(sql_cmd,"SELECT * FROM EMPLOYE where %s",where);
+                        mysql_query(&mysql,sql_cmd);
+                        MYSQL_RES *res = mysql_store_result(&mysql);
+			if((long) mysql_affected_rows(&mysql) > 0)
+			{
+				while((row = mysql_fetch_row(res))) {
+					printf("%s\n",row[1]);
+                		}
+			}
+
 }
 
 /* SI REP NON*/
@@ -148,6 +203,7 @@ void free_variable(){
 	free(var_table);
 }
 
+
 /* FONCTION MAIN UTILISEE POUR LES TESTS */
 /*int main(int argc,char** argv){
 char question[255];
@@ -156,8 +212,8 @@ connect_bdd();
 malloc_variable();
 printf_question(question);
 printf("question : %s\n",question);
-
-start = response_no(start);
+response_yes();
+//start = response_no(start);
 
 //printIds(start);
 free(start);
@@ -166,4 +222,5 @@ free_variable();
 close_mysql();
 return 0;
 }
+
 */
