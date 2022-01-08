@@ -9,6 +9,10 @@ typedef struct Item {
 
 IdQuestion * start = NULL; //POINTEUR POUR STRUCT QUESTION
 
+int found = 0;
+char name[510] = "";
+char where[1000]="";
+
 
 #include "questions.c"
 #include "co_deco_sql.c"
@@ -28,12 +32,212 @@ char phrase[255];
 //proto
 static void gameWindow (GtkWidget *widget, gpointer data);
 static void homeWindow (GtkWidget *widget, gpointer data);
+static void quit (GtkWidget *widget, gpointer data);
 
 //func
+
+static void finish(GtkWidget *widget, gpointer data){
+  GtkWidget *window = GTK_WIDGET(data);
+  GtkWidget *principalBox;
+  GtkWidget *horizontalBoxT;
+  GtkWidget *horizontalBoxB;
+  GtkWidget *response;
+  GtkWidget *verticalBoxR;
+  GtkWidget *logo;
+  GtkWidget *buttonQuit_box;
+  GtkWidget *buttonQuit;
+  GtkWidget *buttonExport_box;
+  GtkWidget *buttonExport;
+
+  //BOXE PRINCIPALE
+  principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
+  gtk_container_add(GTK_CONTAINER(window), principalBox);
+  gtk_widget_set_margin_top(principalBox,50);
+
+  //BOXE HORIZONTALE HAUT
+  horizontalBoxT = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 100);
+  gtk_container_add(GTK_CONTAINER(principalBox), horizontalBoxT);
+  gtk_widget_set_margin_start(horizontalBoxT,200);
+
+  //Vous pensiez à
+  response=gtk_label_new("Partie terminée !");
+  gtk_container_add(GTK_CONTAINER(horizontalBoxT), response);
+  gtk_widget_set_margin_top(response,50);
+
+  //LOGO
+  logo = gtk_image_new_from_file ("./logo.jpeg");
+  gtk_container_add(GTK_CONTAINER(horizontalBoxT), logo);
+  gtk_widget_set_margin_start(logo,100);
+
+  //BOXE HORIZONTALE BAS
+  horizontalBoxB = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 50);
+  gtk_container_add(GTK_CONTAINER(principalBox), horizontalBoxB);
+
+  //BOUTON QUITTER
+  buttonQuit_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (horizontalBoxB), buttonQuit_box);
+  gtk_widget_set_margin_start(buttonQuit_box,75);
+
+  buttonQuit = gtk_button_new_with_label ("Quitter");
+  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
+  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
+  g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  gtk_container_add (GTK_CONTAINER (buttonQuit_box), buttonQuit);
+  gtk_widget_set_size_request(buttonQuit,300,50);
+
+  //BOUTON EXPORTER
+  buttonExport_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (horizontalBoxB), buttonExport_box);
+
+  buttonExport = gtk_button_new_with_label ("Exporter en .pdf");
+//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
+//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
+//  g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  gtk_container_add (GTK_CONTAINER (buttonExport_box), buttonExport);
+  gtk_widget_set_size_request(buttonExport,300,50);
+
+  gtk_widget_show_all(principalBox);
+}
+
+static void lost(GtkWidget *widget, gpointer data){
+  GtkWidget *window = GTK_WIDGET(data);
+  GtkWidget *principalBox;
+  GtkWidget *horizontalBoxT;
+  GtkWidget *horizontalBoxB;
+  GtkWidget *response;
+  GtkWidget *verticalBoxR;
+  GtkWidget *logo;
+  GtkWidget *buttonQuit_box;
+  GtkWidget *buttonQuit;
+  GtkWidget *buttonExport_box;
+  GtkWidget *buttonExport;
+
+  //BOXE PRINCIPALE
+  principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
+  gtk_container_add(GTK_CONTAINER(window), principalBox);
+  gtk_widget_set_margin_top(principalBox,50);
+
+  //BOXE HORIZONTALE HAUT
+  horizontalBoxT = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 100);
+  gtk_container_add(GTK_CONTAINER(principalBox), horizontalBoxT);
+  gtk_widget_set_margin_start(horizontalBoxT,200);
+
+  //Vous pensiez à
+  response=gtk_label_new("Je n'ai pas trouvé");
+  gtk_container_add(GTK_CONTAINER(horizontalBoxT), response);
+  gtk_widget_set_margin_top(response,50);
+
+  //LOGO
+  logo = gtk_image_new_from_file ("./logo.jpeg");
+  gtk_container_add(GTK_CONTAINER(horizontalBoxT), logo);
+  gtk_widget_set_margin_start(logo,100);
+
+  //BOXE HORIZONTALE BAS
+  horizontalBoxB = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 50);
+  gtk_container_add(GTK_CONTAINER(principalBox), horizontalBoxB);
+
+  //BOUTON QUITTER
+  buttonQuit_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (horizontalBoxB), buttonQuit_box);
+  gtk_widget_set_margin_start(buttonQuit_box,75);
+
+  buttonQuit = gtk_button_new_with_label ("Quitter");
+  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
+  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
+  g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  gtk_container_add (GTK_CONTAINER (buttonQuit_box), buttonQuit);
+  gtk_widget_set_size_request(buttonQuit,300,50);
+
+  //BOUTON EXPORTER
+  buttonExport_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (horizontalBoxB), buttonExport_box);
+
+  buttonExport = gtk_button_new_with_label ("Exporter en .pdf");
+//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
+//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
+//  g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  gtk_container_add (GTK_CONTAINER (buttonExport_box), buttonExport);
+  gtk_widget_set_size_request(buttonExport,300,50);
+
+  gtk_widget_show_all(principalBox);
+}
+
+static void win(GtkWidget *widget, gpointer data){
+  GtkWidget *window = GTK_WIDGET(data);
+  GtkWidget *principalBox;
+  GtkWidget *horizontalBox;
+  GtkWidget *verticalBoxL;
+  GtkWidget *question;
+  GtkWidget *response;
+  GtkWidget *verticalBoxR;
+  GtkWidget *logo;
+  GtkWidget *buttonYes_box;
+  GtkWidget *buttonYes;
+  GtkWidget *buttonNo_box;
+  GtkWidget *buttonNo;
+
+  //BOXE PRINCIPALE
+  principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
+  gtk_container_add(GTK_CONTAINER(window), principalBox);
+  gtk_widget_set_margin_top(principalBox,50);
+
+  //BOXE HORIZONTALE
+  horizontalBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 100);
+  gtk_container_add(GTK_CONTAINER(principalBox), horizontalBox);
+  gtk_widget_set_margin_start(horizontalBox,200);
+
+  //BOXE VERTICALE GAUCHE
+  verticalBoxL = gtk_box_new(GTK_ORIENTATION_VERTICAL, 50);
+  gtk_container_add(GTK_CONTAINER(horizontalBox), verticalBoxL);
+
+  //Vous pensiez à
+  question=gtk_label_new("Vous pensiez à :");
+  gtk_container_add(GTK_CONTAINER(verticalBoxL), question);
+  gtk_widget_set_margin_top(question,50);
+
+  //NOM
+  response=gtk_label_new(name);
+  gtk_container_add(GTK_CONTAINER(verticalBoxL), response);
+
+  //BOXE VERTICALE DROITE
+  verticalBoxR = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
+  gtk_container_add(GTK_CONTAINER(horizontalBox), verticalBoxR);
+
+  //LOGO
+  logo = gtk_image_new_from_file ("./logo.jpeg");
+  gtk_container_add(GTK_CONTAINER(verticalBoxR), logo);
+  gtk_widget_set_margin_start(logo,100);
+
+  //BOUTON REPONSE OUI
+  buttonYes_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (verticalBoxR), buttonYes_box);
+  gtk_widget_set_margin_top(buttonYes_box,50);
+  gtk_widget_set_margin_start(buttonYes_box,100);
+
+  buttonYes = gtk_button_new_with_label ("OUI");
+  g_signal_connect (buttonYes, "clicked", G_CALLBACK (finish), (gpointer)window);
+  g_signal_connect_swapped (buttonYes, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  gtk_container_add (GTK_CONTAINER (buttonYes_box), buttonYes);
+
+  //BOUTON REPONSE NON
+  buttonNo_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (verticalBoxR), buttonNo_box);
+  gtk_widget_set_margin_start(buttonNo_box,100);
+
+  buttonNo = gtk_button_new_with_label ("NON");
+  g_signal_connect (buttonNo, "clicked", G_CALLBACK (finish), (gpointer)window);
+  g_signal_connect_swapped (buttonNo, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  gtk_container_add (GTK_CONTAINER (buttonNo_box), buttonNo);
+
+
+  gtk_widget_show_all(principalBox);
+}
 
 static void quit (GtkWidget *widget, gpointer data){
   free_variable();
   start = deleteIds(start);
+  strcpy(where, "");
+  found = 0;
 }
 
 static void pauseWindow (GtkWidget *widget, gpointer data){
@@ -117,9 +321,20 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   GtkWidget *logo;
   GtkWidget *buttonPause_box;
   GtkWidget *buttonPause;
+int ok;
 
   if(pagePause == 0)
-    printf_question(phrase);
+    ok = printf_question(phrase);
+
+  if (ok == 0){
+    lost(NULL, window);
+    return;
+  }
+
+  if(found == 1){
+    win(NULL, window);
+    return;
+  }
 
   pagePause = 0;
 

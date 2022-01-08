@@ -18,7 +18,7 @@ int main(void)
   curl = curl_easy_init();
   if(curl) {
     curl_easy_setopt(curl, CURLOPT_URL, "https://www.esgi.fr/");
- 
+ }
 #ifdef SKIP_PEER_VERIFICATION
     /*
      * If you want to connect to a site who is not using a certificate that is

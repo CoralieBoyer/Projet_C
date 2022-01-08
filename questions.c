@@ -18,7 +18,6 @@ int i;
 int id;
 int boolean;
 char id_fk[25]="";
-char where[1000]="";
 char id_element[5]="";
 //IdQuestion *start = NULL;
 
@@ -26,7 +25,7 @@ char id_element[5]="";
 //proto
 void malloc_variable();
 int describe_table();
-void printf_question(char *phrase);
+int printf_question(char *phrase);
 void free_variable();
 IdQuestion * addId(int newValue, IdQuestion *pStart);
 void searchId(IdQuestion *pStart);
@@ -71,17 +70,13 @@ int describe_table(){
 	return result;
 }
 
-void perdu(){
-printf("ok");
-}
-
 /* RECUPERE UNE QUESTION RANDOM */
-void printf_question(char *phrase){
+int printf_question(char *phrase){
 	int max;
 	char sql_cmd[2000];
 	int count;
 	char question[255];
-
+	int bug = 0;
 
 	//ID RANDOM
 	srand(time(NULL));
@@ -111,8 +106,13 @@ void printf_question(char *phrase){
 		mysql_free_result(res);//Free de la requete de la question
 		i-=3;
 		searchId(start);
+		bug++;
+		if (bug == 50){
+			return 0;
+		}
 	}while(var_table[i] != 0 || boolean == 0);//Refaire la requete si une question a deja ete pose
 	strcpy(phrase,question);
+return 1;
 }
 
 /* SI REP OUI */
@@ -141,7 +141,7 @@ void response_yes(){
                                 break;
                 };
 
-	printf("%s\n",id_fk);
+	//printf("%s\n",id_fk);
 	requete();
 	*(var_table+i)+=1;
 }
@@ -158,11 +158,12 @@ char sql_cmd[2000];
 			sprintf(sql_cmd,"SELECT * FROM EMPLOYE where %s",where);
                         mysql_query(&mysql,sql_cmd);
                         MYSQL_RES *res = mysql_store_result(&mysql);
-			if((long) mysql_affected_rows(&mysql) > 0)
-			{
-				while((row = mysql_fetch_row(res))) {
-					printf("%s\n",row[1]);
-                		}
+			if((long) mysql_affected_rows(&mysql) == 1){
+				row = mysql_fetch_row(res);
+				found = 1;
+				strcpy(name, row[1]);
+				strcat(name," ");
+				strcat(name,row[2]);
 			}
 
 }
