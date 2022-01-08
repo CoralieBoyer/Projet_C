@@ -1,10 +1,10 @@
-#include <mysql.h>
+/*#include <mysql.h>
 #include <string.h>
 #include <stdio.h>
 //#include "co_deco_sql.c"
 #include <time.h>
 #include <stdlib.h>
-
+*/
 //liste chainee
 /*typedef struct Item {
     int value;
@@ -13,12 +13,14 @@
 */
 
 //var
-char* var_table;
+/*char* var_table;
 int i;
 int id;
 int boolean;
+<<<<<<< HEAD
 char id_fk[25]="";
 char id_element[5]="";
+*/
 //IdQuestion *start = NULL;
 
 
