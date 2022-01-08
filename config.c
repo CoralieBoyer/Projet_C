@@ -5,6 +5,12 @@
 #include <time.h>
 #include <gtk/gtk.h>
 #include <mysql.h>
+//#include <setjmp.h>
+#include "hpdf.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 /* STRUCTURES */
 typedef struct Item {
@@ -14,23 +20,34 @@ typedef struct Item {
 IdQuestion * start = NULL;
 
 /* VARIABLES GLOBALES */
-int pagePause = 0; //gtk.c
-char phrase[255]; //gtk.c
-int found = 0; //gtk.c
-char name[510] = ""; //gtk.c
-char where[1000]=""; //gtk.c
-char* var_table; //questions.c
-int i; //questions.c
-int id; //questions.c
-int boolean; //questions.c
-char id_fk[25]=""; //questions.c
-char id_element[5]=""; //questions.c
-MYSQL mysql; //co_deco_sql.c
-MYSQL_ROW row; //co_deco_sql.c
+//gtk.c
+int pagePause = 0;
+char phrase[255];
+int found = 0;
+char name[510] = "";
+char where[1000]="";
+//questions.c
+char* var_table;
+int i;
+int id;
+int boolean;
+char id_fk[25]="";
+char id_element[5]="";
+//co_deco_sql.c
+MYSQL mysql;
+MYSQL_ROW row;
+//pdf.c
+float x=480;
+HPDF_Page page;
+HPDF_Font font;
+HPDF_Doc  pdf;
+char fname[256];
+HPDF_Encoder encoding;
 
 
 /* INCLUDE DES FICHIERS */
 #include "co_deco_sql.c"
+#include "pdf.c"
 #include "my_libsql.c"
 #include "ldc.c"
 #include "questions.c"

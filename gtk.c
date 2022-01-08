@@ -5,6 +5,12 @@ static void quit (GtkWidget *widget, gpointer data);
 
 //func
 
+void export(){
+  closePdf();
+  system("xdg-open ./PDF");
+  printf("ok\n");
+}
+
 static void finish(GtkWidget *widget, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
   GtkWidget *principalBox;
@@ -58,10 +64,8 @@ static void finish(GtkWidget *widget, gpointer data){
   buttonExport_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (horizontalBoxB), buttonExport_box);
 
-  buttonExport = gtk_button_new_with_label ("Exporter en .pdf");
-//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
-//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
-//  g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  buttonExport = gtk_button_new_with_label ("Voir les fichiers .pdf");
+  g_signal_connect (buttonExport, "clicked", G_CALLBACK (export), NULL);
   gtk_container_add (GTK_CONTAINER (buttonExport_box), buttonExport);
   gtk_widget_set_size_request(buttonExport,300,50);
 
@@ -121,10 +125,8 @@ static void lost(GtkWidget *widget, gpointer data){
   buttonExport_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (horizontalBoxB), buttonExport_box);
 
-  buttonExport = gtk_button_new_with_label ("Exporter en .pdf");
-//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
-//  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
-//  g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
+  buttonExport = gtk_button_new_with_label ("Voir les fichiers .pdf");
+  g_signal_connect (buttonExport, "clicked", G_CALLBACK (export), NULL);
   gtk_container_add (GTK_CONTAINER (buttonExport_box), buttonExport);
   gtk_widget_set_size_request(buttonExport,300,50);
 
@@ -207,6 +209,7 @@ static void quit (GtkWidget *widget, gpointer data){
   start = deleteIds(start);
   strcpy(where, "");
   found = 0;
+  closePdf();
 }
 
 static void pauseWindow (GtkWidget *widget, gpointer data){
@@ -415,6 +418,7 @@ static void homeWindow (GtkWidget *THEwindow, gpointer data){
 
   buttonStart = gtk_button_new_with_label ("JOUER");
   g_signal_connect (buttonStart, "clicked", G_CALLBACK (malloc_variable), NULL);
+  g_signal_connect (buttonStart, "clicked", G_CALLBACK (createPdf), NULL);
   g_signal_connect (buttonStart, "clicked", G_CALLBACK (gameWindow), (gpointer)window);
   g_signal_connect_swapped (buttonStart, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonStart_box), buttonStart);

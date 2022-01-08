@@ -1,29 +1,3 @@
-/*#include <mysql.h>
-#include <string.h>
-#include <stdio.h>
-//#include "co_deco_sql.c"
-#include <time.h>
-#include <stdlib.h>
-*/
-//liste chainee
-/*typedef struct Item {
-    int value;
-    struct Item * next;
-} IdQuestion;
-*/
-
-//var
-/*char* var_table;
-int i;
-int id;
-int boolean;
-<<<<<<< HEAD
-char id_fk[25]="";
-char id_element[5]="";
-*/
-//IdQuestion *start = NULL;
-
-
 //proto
 void malloc_variable();
 int describe_table();
@@ -32,11 +6,6 @@ void free_variable();
 IdQuestion * addId(int newValue, IdQuestion *pStart);
 void searchId(IdQuestion *pStart);
 void requete();
-
-//pointeur func
-//void (*pSearchId)(IdQuestion *);
-//void * pSearchId = searchId;
-
 
 //func
 
@@ -146,6 +115,7 @@ void response_yes(){
 	//printf("%s\n",id_fk);
 	requete();
 	*(var_table+i)+=1;
+	addPdf(phrase,"oui");
 }
 
 void requete(){
@@ -176,6 +146,7 @@ IdQuestion * response_no(IdQuestion *pStart) {
     tmp = malloc(sizeof(IdQuestion));
     tmp->value = id;
     tmp->next = pStart;
+    addPdf(phrase,"non");
     return tmp;
 }
 

@@ -1,9 +1,9 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <setjmp.h>
-#include "hpdf.h"
+//prot
+void createPdf();
+void closePdf();
+void addPdf(char * question, char * answer);
 
+void createPdf(){
 #ifdef HPDF_DLL
 void  __stdcall
 #else
@@ -17,23 +17,21 @@ error_handler  (HPDF_STATUS   error_no,
                 (HPDF_UINT)detail_no);
 }
 
-int main(int argc, char **argv)
-{
-    HPDF_Doc  pdf;
-    char fname[256];
-    HPDF_Page page;
-    HPDF_Font font;
-    HPDF_Encoder encoding;
-	float x=480;
+    //creation dossier
+    struct stat st = {0};
+
+    if (stat("./tests", &st) == -1) {
+        mkdir("./tests", 0700); //id employe
+    }
 
     //nommer fic
-    strcpy (fname, argv[0]);
+    strcpy (fname, "PDF/test"); //id max + 1 fichier + date
     strcat (fname, ".pdf");
 
     pdf = HPDF_New (error_handler, NULL);//voir si erreur lors de la recuperation des header
     if (!pdf) {
         printf ("error: cannot create PdfDoc object\n");
-        return 1;
+        return;
     }
 
     font = HPDF_GetFont (pdf, "Times-Roman", "WinAnsiEncoding");//ecrire en Times-Roman
@@ -50,17 +48,29 @@ int main(int argc, char **argv)
     HPDF_Page_MoveTextPos (page,0, x);//position text (y,x)
     HPDF_Page_ShowText (page, "2VINE_KI_C");//text a afficher
     HPDF_Page_EndText (page);
+}
 
+void addPdf(char * question, char * answer){
     x-=20;
-    //titre pdf
+    //Question
     HPDF_Page_BeginText (page);//creation zone de texte
     HPDF_Page_SetFontAndSize (page, font, 10);
     HPDF_Page_MoveTextPos (page,0, x);//position text (y,x)
-    HPDF_Page_ShowText (page, "Test");//text a afficher
+    HPDF_Page_ShowText (page, question);//text a afficher
+    HPDF_Page_EndText (page);
+
+    x-=10;
+    //Reponse
+    HPDF_Page_BeginText (page);//creation zone de texte
+    HPDF_Page_SetFontAndSize (page, font, 10);
+    HPDF_Page_MoveTextPos (page,0, x);//position text (y,x)
+    HPDF_Page_ShowText (page, answer);//text a afficher
     HPDF_Page_EndText (page);
 
 
+}
 
+void closePdf(){
     encoding = HPDF_GetEncoder (pdf, "ISO8859-3");//specifie le type de l'encodeur =>ici on prend l'alphabet francais
 
     /* save the document to a file */
