@@ -1,8 +1,40 @@
 #include <gtk/gtk.h>
-#include "./main.c"
+#include "main.c"
 
+//struct
+typedef struct Item {
+    int value;
+    struct Item * next;
+} IdQuestion;
+
+IdQuestion * start = NULL; //POINTEUR POUR STRUCT QUESTION
+
+
+#include "questions.c"
+#include "co_deco_sql.c"
+
+//struct
+/*typedef struct Item {
+    int value;
+    struct Item * next;
+} IdQuestion;*/
+
+//var
+//int* var_table;
+int pagePause = 0;
+char phrase[255];
+
+
+//proto
 static void gameWindow (GtkWidget *widget, gpointer data);
 static void homeWindow (GtkWidget *widget, gpointer data);
+
+//func
+
+static void quit (GtkWidget *widget, gpointer data){
+  free_variable();
+  start = deleteIds(start);
+}
 
 static void pauseWindow (GtkWidget *widget, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
@@ -15,6 +47,8 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   GtkWidget *buttonQuit;
   GtkWidget *buttonQuit_box;
   GtkWidget *title;
+
+  pagePause = 1;
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
@@ -51,6 +85,7 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
 
   buttonQuit = gtk_button_new_with_label ("Quitter");
   g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
+  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
   g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonQuit_box), buttonQuit);
   gtk_widget_set_size_request(buttonQuit,300,50);
@@ -61,8 +96,11 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   gtk_widget_set_margin_top(title,10); //AJOUT DE MARGE EN HAUT
 //  gtk_widget_set_size_request(title,300,50); //TAILLE
 
-
   gtk_widget_show_all(principalBox);
+}
+
+static void noRepeatQuestions(GtkWidget *widget, gpointer data){
+  start = response_no(start);
 }
 
 static void gameWindow (GtkWidget *widget, gpointer data){
@@ -79,6 +117,11 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   GtkWidget *logo;
   GtkWidget *buttonPause_box;
   GtkWidget *buttonPause;
+
+  if(pagePause == 0)
+    printf_question(phrase);
+
+  pagePause = 0;
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
@@ -101,7 +144,7 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_widget_set_margin_start(verticalBoxRight,75); //AJOUT DE MARGE A GAUCHE
 
   //QUESTION
-  question=gtk_label_new("Question blablabla");
+  question=gtk_label_new(phrase);
   gtk_container_add(GTK_CONTAINER(verticalBoxLeft), question);
 
   //BOUTON REPONSE OUI
@@ -109,6 +152,7 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBoxLeft), buttonYes_box);
 
   buttonYes = gtk_button_new_with_label ("OUI");
+  g_signal_connect (buttonYes, "clicked", G_CALLBACK (response_yes), NULL);
   g_signal_connect (buttonYes, "clicked", G_CALLBACK (gameWindow), (gpointer)window);
   g_signal_connect_swapped (buttonYes, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonYes_box), buttonYes);
@@ -118,6 +162,7 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBoxLeft), buttonNo_box);
 
   buttonNo = gtk_button_new_with_label ("NON");
+  g_signal_connect (buttonNo, "clicked", G_CALLBACK (noRepeatQuestions), NULL);
   g_signal_connect (buttonNo, "clicked", G_CALLBACK (gameWindow), (gpointer)window);
   g_signal_connect_swapped (buttonNo, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonNo_box), buttonNo);
@@ -138,7 +183,13 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   gtk_widget_show_all(principalBox);
 }
 
-static void homeWindow (GtkWidget *widget, gpointer data){
+static void close_window (GtkWidget *widget, gpointer data){
+  GtkWidget *window = GTK_WIDGET(data);
+//  gtk_widget_hide(window);
+  modifyWindow();
+}
+
+static void homeWindow (GtkWidget *THEwindow, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
   GtkWidget *title;
   GtkWidget *principalBox;
@@ -179,6 +230,7 @@ static void homeWindow (GtkWidget *widget, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBox), buttonStart_box);
 
   buttonStart = gtk_button_new_with_label ("JOUER");
+  g_signal_connect (buttonStart, "clicked", G_CALLBACK (malloc_variable), NULL);
   g_signal_connect (buttonStart, "clicked", G_CALLBACK (gameWindow), (gpointer)window);
   g_signal_connect_swapped (buttonStart, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonStart_box), buttonStart);
@@ -189,8 +241,8 @@ static void homeWindow (GtkWidget *widget, gpointer data){
   gtk_container_add (GTK_CONTAINER (verticalBox), buttonModify_box);
 
   buttonModify = gtk_button_new_with_label ("MODIFIER");
-  g_signal_connect (buttonModify, "clicked", G_CALLBACK (modifyWindow), NULL);
-  g_signal_connect_swapped (buttonModify, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+  g_signal_connect (buttonModify, "clicked", G_CALLBACK (close_window), THEwindow);
+//  g_signal_connect (buttonModify, "clicked", G_CALLBACK (modifyWindow), NULL);
   gtk_container_add (GTK_CONTAINER (buttonModify_box), buttonModify);
   gtk_widget_set_size_request(buttonModify,300,50);
 
@@ -222,10 +274,12 @@ static void activate (GtkApplication *app, gpointer user_data){
   gtk_widget_show(window);
   gtk_widget_show(box);
 
-  homeWindow(NULL,box);
+  homeWindow(window,box);
 }
 
 int main (int argc, char **argv){
+  connect_bdd();
+
   GtkApplication *app;
   int status;
 
@@ -234,5 +288,7 @@ int main (int argc, char **argv){
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
+  close_mysql();
+  free(start);
   return status;
 }

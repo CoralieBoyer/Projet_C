@@ -2,12 +2,13 @@
 #include <mysql.h>
 #include <string.h>
 
+
     MYSQL mysql;
     MYSQL_ROW row;
 
 //prototype
-void myFegtes(char *string,int size);
-void connect_bdd();//connexion bdd
+void saisir(char* val,int size);
+//void connect_bdd();//connexion bdd
 void print_tables();//print list des tables de bdd
 void print_table(char* table);//print donnee de la table select
 int  delete_element(char* table,int id);//suppr element de table
@@ -15,24 +16,26 @@ void  insert_table(int tables);//choisir table ou ajouter element
 
 void insert_age();
 void insert_employe();
-void insert_entreprise();//rajouter param
+void insert_entreprise();
 void insert_physique();
 void insert_questions();
 void insert_travail();
 void insert_visage();
 
-void close_mysql();//free pointer
+//void close_mysql();//free pointer
 
 //func
 
-	void myFegtes(char *string,int size){
-	fgets(string,size,stdin);
-        if(string[strlen(string)-1]== '\n');
-        string[strlen(string)-1]= '\0';
+	void saisir(char* val,int size){
+		fflush(stdin);
+		fgets(val,size,stdin);
+		fflush(stdin);
 	}
 
+
+
 	//connexion bdd
-	void connect_bdd(){
+/*	void connect_bdd(){
 		mysql_init(&mysql);
    		// mysql_options(&mysql,MYSQL_READ_DEFAULT_GROUP,"your_prog_name");
     		if (!mysql_real_connect(&mysql,"localhost","usr","mdp","2vine_ki_C",0,NULL,0))
@@ -40,7 +43,7 @@ void close_mysql();//free pointer
         		fprintf(stderr, "Failed to connect to database: Error: %s\n",
                 	mysql_error(&mysql));
     		}
-	}
+	}*/
 
 	//print liste des tables de bdd
 	void print_tables(){
@@ -51,7 +54,7 @@ void close_mysql();//free pointer
 
     		while((row = mysql_fetch_row(res))) {
         		for (int i=0 ; i < mysql_num_fields(res); i++)
-            			printf("\n \t\t %d) \t %s\n",count,row[i]);
+            			printf("\n \t\t %d) \t %s \n",count,row[i]);
 	    			count++;
     		}//print result to the request
 
@@ -154,18 +157,18 @@ void close_mysql();//free pointer
 	char name[100];
 	char link[100];
 
-	//fflush(stdin);
+	printf("Entrez le nom de l'entreprise: ");
+	scanf(" ");
+	saisir(name,100);
 
-	printf("\nEntrez le nom de l'entreprise");
-	myFegtes(name,100);
-	//fflush(stdin);
-
-	printf("\nEntrez le lien de l'entreprise");
-        myFegtes(link,100);
+	printf("\nEntrez le lien de l'entreprise: ");
+        fflush(stdin);
+	//scanf("%s",link);
+	saisir(link,100);
 
 	sprintf(sql_cmd,"INSERT INTO ENTREPRISE (Nom,Lien) VALUES('%s','%s')",name,link);
 	mysql_query(&mysql,sql_cmd);
-	printf("ok entreprise");
+	printf("ok entreprise\n");
 	}
 
 	void insert_physique(){
@@ -191,9 +194,10 @@ void close_mysql();//free pointer
 	void insert_travail(){
 	char sql_cmd[2000];
 	char domaine[100];
-	printf("\nEntrez le domaine de travail");
-        myFegtes(domaine,100);
-
+	printf("\nEntrez le metier: ");
+	scanf("\n");
+        saisir(domaine,100);
+	
         sprintf(sql_cmd,"INSERT INTO TRAVAIL (Domaine) VALUES('%s')",domaine);
         mysql_query(&mysql,sql_cmd);
         }
@@ -210,10 +214,11 @@ void close_mysql();//free pointer
 
 
 
-	//fermer connexion
+/*	//fermer connexion
 	void close_mysql(){
 		mysql_close(&mysql);//free the pointer /close connect
-	}
+	}*/
+
 //structure
 /*
 Struct ENTREPRISE{
