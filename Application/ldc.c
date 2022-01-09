@@ -11,6 +11,7 @@ printf("Voici les TABLES que vous pouvez modifier\n");
 printf_tables();
 clean_stdin();
 printf("Ou vous pouvez creer une nouvelle TABLE pour rajouter des informations\n");
+clean_stdin();
 do{
 printf("Voulez-vous modifier une TABLE deja existante (m) ou en creer une nouvelle (a): ");
 scanf("%c",&next);

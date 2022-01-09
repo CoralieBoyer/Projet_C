@@ -46,10 +46,12 @@ HPDF_Font font;
 HPDF_Doc  pdf;
 char fname[256];
 HPDF_Encoder encoding;
-
+//curl.c
+char date[20] = "";
 
 /* INCLUDE DES FICHIERS */
 #include "co_deco_sql.c"
+#include "curl.c"
 #include "pdf.c"
 #include "my_libsql.c"
 #include "ldc.c"
@@ -58,7 +60,7 @@ HPDF_Encoder encoding;
 //Ajouter les fichiers de modif
 
 int main (int argc, char **argv){
-  printf("BIENVUE DANS LE JEU 2vine_ki_C !\n");
+  printf("BIENVENUE DANS LE JEU 2vine_ki_C !\n");
   printf("\nAvant de commencer :\n");
 
   printf("Entrez votre nom de famille (sans espace)\n");
@@ -73,5 +75,6 @@ int main (int argc, char **argv){
 
   int status;
   play(status, argc, argv);
+  HPDF_Free (pdf);
   return status;
 }

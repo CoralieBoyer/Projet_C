@@ -17,22 +17,27 @@ error_handler  (HPDF_STATUS   error_no,
                 (HPDF_UINT)detail_no);
 }
 
-    //creation dossier
+/* CREATION DU DOSSIER */
     struct stat st = {0};
     if (stat(directory, &st) == -1) {
 	mkdir(directory, 0700); //id employe
     }
 
+/* NOMMER LE FICHIER */
     //recup id max fichier dans la bdd
     mysql_query(&mysql,"SELECT MAX(id)+1 FROM FICHIER");
     MYSQL_RES * res = mysql_store_result(&mysql);
     row = mysql_fetch_row(res);
 
-    //nommer fic
+    //recup date
+    recoverDate();
+
     //strcpy (fname, "./PDF/");
     strcat (fname, directory);
     strcat (fname,"/fic");
     strcat (fname, row[0]); //AJOUTER LA DATE A LA FIN DU NOM
+    strcat (fname, "-");
+    strcat (fname, date);
     strcat (fname, ".pdf");
 
     pdf = HPDF_New (error_handler, NULL);//voir si erreur lors de la recuperation des header
@@ -78,10 +83,9 @@ void addPdf(char * question, char * answer){
 }
 
 void closePdf(){
+printf("ok\n");
     encoding = HPDF_GetEncoder (pdf, "ISO8859-3");//specifie le type de l'encodeur =>ici on prend l'alphabet francais
 
     /* save the document to a file */
     HPDF_SaveToFile (pdf, fname);
-
-    HPDF_Free (pdf);
 }
