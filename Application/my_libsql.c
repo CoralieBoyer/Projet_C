@@ -253,42 +253,46 @@ void insert_questions(){
 	}
 	mysql_free_result(res);
 
-	printf("selectionner le numero de la table a changer: ");
-	scanf("%d",&num_table);
+	do {
+		int error=0;
+		printf("selectionner le numero de la table a changer: ");
+		scanf("%d",&num_table);
 
-	switch(num_table){
+		switch(num_table){
 
-	case 0:
-		strcpy(name_table,"AGE");
-		strcat(champs,",ID_AGE");
-		break;
-	case 1:
-		strcpy(name_table,"CHEVEUX");
-		strcat(champs,",ID_CHEVEUX");
-		break;
-	case 2:
-		strcpy(name_table,"PILOSITE");
-		strcat(champs,",ID_PILOSITE");
-		break;
-	case 3:
-		strcpy(name_table,"SEXE");
-		strcat(champs,",ID_SEXE");
-		break;
-	case 4:
-		strcpy(name_table,"TAILLE");
-		strcat(champs,",ID_TAILLE");
-		break;
-	case 5:
-		strcpy(name_table,"TRAVAIL");
-		strcat(champs,",ID_TRAVAIL");
-		break;
-	case 6:
-		strcpy(name_table,"YEUX");
-		strcat(champs,",ID_YEUX");
-		break;
-	default:
-		printf("erreur de saisie");
-	}
+		case 0:
+			strcpy(name_table,"AGE");
+			strcat(champs,",ID_AGE");
+			break;
+		case 1:
+			strcpy(name_table,"CHEVEUX");
+			strcat(champs,",ID_CHEVEUX");
+			break;
+		case 2:
+			strcpy(name_table,"PILOSITE");
+			strcat(champs,",ID_PILOSITE");
+			break;
+		case 3:
+			strcpy(name_table,"SEXE");
+			strcat(champs,",ID_SEXE");
+			break;
+		case 4:
+			strcpy(name_table,"TAILLE");
+			strcat(champs,",ID_TAILLE");
+			break;
+		case 5:
+			strcpy(name_table,"TRAVAIL");
+			strcat(champs,",ID_TRAVAIL");
+			break;
+		case 6:
+			strcpy(name_table,"YEUX");
+			strcat(champs,",ID_YEUX");
+			break;
+		default:
+			printf("table inconnu, veuillez recommencer\n");
+			error=1;
+		}
+	while(error ==1);
 	printf("%s",champs);
 	insert_element(name_table);
 	do{
