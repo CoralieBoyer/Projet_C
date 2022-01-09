@@ -43,7 +43,7 @@ int describe_table(){
 
 /* RECUPERE UNE QUESTION RANDOM */
 int printf_question(char *phrase){
-	int max;
+	int max = 0;
 	char sql_cmd[2000];
 	int count;
 	char question[255];
@@ -51,11 +51,11 @@ int printf_question(char *phrase){
 
 	//ID RANDOM
 	srand(time(NULL));
-	sprintf(sql_cmd,"SELECT MAX(ID)FROM QUESTIONS");
+	sprintf(sql_cmd,"SELECT ID FROM QUESTIONS");
 	mysql_query(&mysql,sql_cmd);
 	MYSQL_RES * res = mysql_store_result(&mysql);
 	while((row = mysql_fetch_row(res))) {
-		max =*row[0]-'0';
+		max++;
 	}
 	mysql_free_result(res);
 

@@ -2,7 +2,9 @@
 void createPdf();
 void closePdf();
 void addPdf(char * question, char * answer);
+void createPagePdf();
 
+//func
 void createPdf(){
 #ifdef HPDF_DLL
 void  __stdcall
@@ -24,19 +26,11 @@ error_handler  (HPDF_STATUS   error_no,
     }
 
 /* NOMMER LE FICHIER */
-    //recup id max fichier dans la bdd
-    mysql_query(&mysql,"SELECT MAX(id)+1 FROM FICHIER");
-    MYSQL_RES * res = mysql_store_result(&mysql);
-    row = mysql_fetch_row(res);
-
     //recup date
     recoverDate();
 
-    //strcpy (fname, "./PDF/");
-    strcat (fname, directory);
-    strcat (fname,"/fic");
-    strcat (fname, row[0]); //AJOUTER LA DATE A LA FIN DU NOM
-    strcat (fname, "-");
+    strcpy (fname, directory);
+    strcat (fname,"/fic-");
     strcat (fname, date);
     strcat (fname, ".pdf");
 
@@ -48,22 +42,60 @@ error_handler  (HPDF_STATUS   error_no,
 
     font = HPDF_GetFont (pdf, "Times-Roman", "WinAnsiEncoding");//ecrire en Times-Roman
 
+    createPagePdf();
+
+/* HAUT DE PAGE */
+    //titre
+    HPDF_Page_BeginText (page);//creation zone de texte
+    HPDF_Page_SetFontAndSize (page, font, 20);
+    HPDF_Page_MoveTextPos (page,100, x);//position text (y,x)
+    HPDF_Page_ShowText (page, "2VINE_KI_C");//text a afficher
+    HPDF_Page_EndText (page);
+
+    //date
+    x-=20;
+    char tmp[255];
+    strcpy(tmp,"Date : ");
+    strncat(tmp,date,10);
+    strcat (tmp, "\0");
+    HPDF_Page_BeginText (page);//creation zone de texte
+    HPDF_Page_SetFontAndSize (page, font, 10);
+    HPDF_Page_MoveTextPos (page,220, x);//position text (y,x)
+    HPDF_Page_ShowText (page, tmp);//text a afficher
+    HPDF_Page_EndText (page);
+
+    strcpy(tmp,"Joueur : ");
+    strcat(tmp, userFirstName);
+    strcat(tmp, " ");
+    strcat(tmp, userName);
+    HPDF_Page_BeginText (page);//creation zone de texte
+    HPDF_Page_SetFontAndSize (page, font, 10);
+    HPDF_Page_MoveTextPos (page,0, x);//position text (y,x)
+    HPDF_Page_ShowText (page, tmp);//text a afficher
+    HPDF_Page_EndText (page);
+
+    x-=10;
+}
+
+void createPagePdf(){
+/* CREATION DE LA PAGE */
     page = HPDF_AddPage (pdf);//ajouter page a doc
 
-    //taile pdf
+/* PARAMETRES DE LA PAGE */
+    //Initialisation de x
+    x=480;
+
+    //taile de la page
     HPDF_Page_SetWidth (page, 300);//(y)
     HPDF_Page_SetHeight (page, 500);//(x)
 
-    //titre pdf
-    HPDF_Page_BeginText (page);//creation zone de texte
-    HPDF_Page_SetFontAndSize (page, font, 20);
-    HPDF_Page_MoveTextPos (page,0, x);//position text (y,x)
-    HPDF_Page_ShowText (page, "2VINE_KI_C");//text a afficher
-    HPDF_Page_EndText (page);
 }
 
 void addPdf(char * question, char * answer){
-    x-=20;
+    x-=20; //position du texte
+    if(x-10 <= 0)
+      createPagePdf();
+
     //Question
     HPDF_Page_BeginText (page);//creation zone de texte
     HPDF_Page_SetFontAndSize (page, font, 10);
@@ -71,7 +103,7 @@ void addPdf(char * question, char * answer){
     HPDF_Page_ShowText (page, question);//text a afficher
     HPDF_Page_EndText (page);
 
-    x-=10;
+    x-=10; //position du texte
     //Reponse
     HPDF_Page_BeginText (page);//creation zone de texte
     HPDF_Page_SetFontAndSize (page, font, 10);
@@ -82,10 +114,46 @@ void addPdf(char * question, char * answer){
 
 }
 
-void closePdf(){
-printf("ok\n");
+void closePdf(char *answer){
+    char tmp[255];
+
+    x-=30; //position du texte
+    if(x-25 <= 0)
+       createPagePdf();
+
+    //Question
+    HPDF_Page_BeginText (page);//creation zone de texte
+    HPDF_Page_SetFontAndSize (page, font, 10);
+    HPDF_Page_MoveTextPos (page,100, x);//position text (y,x)
+    HPDF_Page_ShowText (page, "La personne a ete trouvee ?");//text a afficher
+    HPDF_Page_EndText (page);
+
+    x-=10; //position du texte
+    //Reponse
+    HPDF_Page_BeginText (page);//creation zone de texte
+    HPDF_Page_SetFontAndSize (page, font, 10);
+    HPDF_Page_MoveTextPos (page,150, x);//position text (y,x)
+    HPDF_Page_ShowText (page, answer);//text a afficher
+    HPDF_Page_EndText (page);
+
+    if(answer == "oui"){
+
+      strcpy(tmp,"Reponse : ");
+      strcat(tmp, userFirstName);
+      strcat(tmp, " ");
+      strcat(tmp, userName);
+      x-=15;
+      HPDF_Page_BeginText (page);//creation zone de texte
+      HPDF_Page_SetFontAndSize (page, font, 10);
+      HPDF_Page_MoveTextPos (page,0, x);//position text (y,x)
+      HPDF_Page_ShowText (page, tmp);//text a afficher
+      HPDF_Page_EndText (page);
+    }
+
     encoding = HPDF_GetEncoder (pdf, "ISO8859-3");//specifie le type de l'encodeur =>ici on prend l'alphabet francais
 
     /* save the document to a file */
-    HPDF_SaveToFile (pdf, fname);
+      HPDF_SaveToFile (pdf, fname);
+
+    HPDF_Free (pdf);
 }

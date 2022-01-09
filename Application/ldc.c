@@ -1,11 +1,3 @@
-//a virer
-#include <string.h>
-#include <mysql.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "my_libsql.c"
-#include "co_deco_sql.c"
-
 void backOffice(){
 //var
 char name_table[10];
@@ -70,12 +62,4 @@ if(next == 'm'){
 else if(next =='a'){
 	printf("ajout de table \n");
 }
-}
-
-
-int main(int argc, char** argv){
-	connect_bdd();
-	backOffice();
-	close_mysql();
-	return 0;
 }
