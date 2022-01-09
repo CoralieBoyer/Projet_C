@@ -6,7 +6,6 @@
 int function_pt(void *ptr, size_t size, size_t nmemb, void *stream){
   char **response_ptr =  (char**)stream;
 *response_ptr = strndup(ptr, (size_t)(size *nmemb));
-
 }
 
 void recoverDate(){

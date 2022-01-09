@@ -5,7 +5,6 @@
 #include <time.h>
 #include <gtk/gtk.h>
 #include <mysql.h>
-//#include <setjmp.h>
 #include "hpdf.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -25,6 +24,7 @@ char userFirstName[255] = "Prenom1";
 char directory[255] = "";
 //gtk.c
 int pagePause = 0;
+int ok;
 char phrase[255];
 int found = 0;
 char name[510] = "";
@@ -57,24 +57,19 @@ char date[20] = "";
 #include "ldc.c"
 #include "questions.c"
 #include "gtk.c"
-//Ajouter les fichiers de modif
+
+/* DEBUT DU PROGRAMME */
+void beforeStarting();
 
 int main (int argc, char **argv){
-  printf("BIENVENUE DANS LE JEU 2vine_ki_C !\n");
-  printf("\nAvant de commencer :\n");
-
-  printf("Entrez votre nom de famille (sans espace)\n");
-  scanf("%s", userName);
-
-  printf("Entrez votre prenom (sans espace)\n");
-  scanf("%s", userFirstName);
-
-  strcat (directory, "./PDF/");
-  strcat (directory, userName);
-  strcat (directory, userFirstName);
-
   int status;
+
+  connect_bdd();
+
+  beforeStarting();
   play(status, argc, argv);
-  HPDF_Free (pdf);
+
+  close_mysql();
+
   return status;
 }

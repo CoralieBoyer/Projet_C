@@ -10,7 +10,6 @@ void export(){
   strcat(openDirectory,directory);
   system(openDirectory);
   //closePdf();
-//  system("xdg-open https://www.esgi.fr");
 }
 
 static void finish(GtkWidget *widget, gpointer data){
@@ -25,8 +24,6 @@ static void finish(GtkWidget *widget, gpointer data){
   GtkWidget *buttonQuit;
   GtkWidget *buttonExport_box;
   GtkWidget *buttonExport;
-
-  closePdf();
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
@@ -89,7 +86,7 @@ static void lost(GtkWidget *widget, gpointer data){
   GtkWidget *buttonExport_box;
   GtkWidget *buttonExport;
 
-  closePdf();
+  closePdf("non");
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
@@ -137,6 +134,14 @@ static void lost(GtkWidget *widget, gpointer data){
   gtk_widget_set_size_request(buttonExport,300,50);
 
   gtk_widget_show_all(principalBox);
+}
+
+void finishWin(){
+  closePdf("oui");
+}
+
+void finishLost(){
+  closePdf("non");
 }
 
 static void win(GtkWidget *widget, gpointer data){
@@ -192,6 +197,7 @@ static void win(GtkWidget *widget, gpointer data){
   gtk_widget_set_margin_start(buttonYes_box,100);
 
   buttonYes = gtk_button_new_with_label ("OUI");
+  g_signal_connect (buttonYes, "clicked", G_CALLBACK (finishWin), NULL);
   g_signal_connect (buttonYes, "clicked", G_CALLBACK (finish), (gpointer)window);
   g_signal_connect_swapped (buttonYes, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonYes_box), buttonYes);
@@ -202,6 +208,7 @@ static void win(GtkWidget *widget, gpointer data){
   gtk_widget_set_margin_start(buttonNo_box,100);
 
   buttonNo = gtk_button_new_with_label ("NON");
+  g_signal_connect (buttonNo, "clicked", G_CALLBACK (finishLost), NULL);
   g_signal_connect (buttonNo, "clicked", G_CALLBACK (finish), (gpointer)window);
   g_signal_connect_swapped (buttonNo, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonNo_box), buttonNo);
@@ -215,7 +222,11 @@ static void quit (GtkWidget *widget, gpointer data){
   start = deleteIds(start);
   strcpy(where, "");
   found = 0;
-  //closePdf();
+  pagePause = 0;
+}
+
+void stop(){
+  closePdf("Partie interompu");
 }
 
 static void pauseWindow (GtkWidget *widget, gpointer data){
@@ -268,6 +279,7 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   buttonQuit = gtk_button_new_with_label ("Quitter");
   g_signal_connect (buttonQuit, "clicked", G_CALLBACK (homeWindow), (gpointer)window);
   g_signal_connect (buttonQuit, "clicked", G_CALLBACK (quit), NULL);
+  g_signal_connect (buttonQuit, "clicked", G_CALLBACK (stop), NULL);
   g_signal_connect_swapped (buttonQuit, "clicked", G_CALLBACK (gtk_widget_destroy), principalBox);
   gtk_container_add (GTK_CONTAINER (buttonQuit_box), buttonQuit);
   gtk_widget_set_size_request(buttonQuit,300,50);
@@ -299,7 +311,6 @@ static void gameWindow (GtkWidget *widget, gpointer data){
   GtkWidget *logo;
   GtkWidget *buttonPause_box;
   GtkWidget *buttonPause;
-int ok;
 
   if(pagePause == 0)
     ok = printf_question(phrase);
@@ -334,11 +345,12 @@ int ok;
   //BOXE VERTICAL DROITE
   verticalBoxRight = gtk_box_new(GTK_ORIENTATION_VERTICAL, 30);
   gtk_container_add(GTK_CONTAINER(horizontalBox), verticalBoxRight);
-  gtk_widget_set_margin_start(verticalBoxRight,75); //AJOUT DE MARGE A GAUCHE
+  gtk_widget_set_margin_end(verticalBoxRight,75); //AJOUT DE MARGE A DROITE
 
   //QUESTION
   question=gtk_label_new(phrase);
   gtk_container_add(GTK_CONTAINER(verticalBoxLeft), question);
+  gtk_widget_set_size_request(question,30,100);
 
   //BOUTON REPONSE OUI
   buttonYes_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
@@ -382,6 +394,10 @@ static void close_window (GtkWidget *widget, gpointer data){
   backOffice();
 }
 
+void entrepriseLink(){
+  system("xdg-open https://www.esgi.fr");
+}
+
 static void homeWindow (GtkWidget *THEwindow, gpointer data){
   GtkWidget *window = GTK_WIDGET(data);
   GtkWidget *title;
@@ -393,9 +409,11 @@ static void homeWindow (GtkWidget *THEwindow, gpointer data){
   GtkWidget *buttonModify;
   GtkWidget *buttonModify_box;
   GtkWidget *logo;
+  GtkWidget *buttonLink;
+  GtkWidget *buttonLink_box;
 
   //BOXE PRINCIPALE
-  principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
+  principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 80);
   gtk_container_add(GTK_CONTAINER(window), principalBox);
 
   //TITRE
@@ -440,6 +458,17 @@ static void homeWindow (GtkWidget *THEwindow, gpointer data){
   gtk_container_add (GTK_CONTAINER (buttonModify_box), buttonModify);
   gtk_widget_set_size_request(buttonModify,300,50);
 
+  //BOUTON LIEN
+  buttonLink_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (principalBox), buttonLink_box);
+
+  buttonLink = gtk_button_new_with_mnemonic ("Voir le site de l'entreprise.");
+  g_signal_connect (buttonLink, "clicked", G_CALLBACK (entrepriseLink), NULL);
+  gtk_container_add (GTK_CONTAINER (buttonLink_box), buttonLink);
+  gtk_widget_set_size_request(buttonLink,30,10);
+  gtk_widget_set_margin_start(buttonLink,500);
+
+
   gtk_widget_show_all(principalBox);
 }
 
@@ -472,7 +501,7 @@ static void activate (GtkApplication *app, gpointer user_data){
 }
 
 int play(int status, int argc, char **argv){
-  connect_bdd();
+//  connect_bdd();
 
   GtkApplication *app;
 
@@ -481,7 +510,35 @@ int play(int status, int argc, char **argv){
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
-  close_mysql();
+  //close_mysql();
   free(start);
   return status;
+}
+
+void beforeStarting(){
+  char sql_cmd[2000];
+  int error = 0;
+
+  printf("BIENVENUE DANS LE JEU 2vine_ki_C !\n");
+  printf("\nAvant de commencer :\n");
+
+  do{
+    if(error==1)
+      printf("\nCe nom n'est pas reconnu.\n");
+
+    printf("Entrez votre nom de famille (sans espace)\n");
+    scanf("%s", userName);
+
+    printf("Entrez votre prenom (sans espace)\n");
+    scanf("%s", userFirstName);
+
+    sprintf(sql_cmd,"SELECT * FROM EMPLOYE WHERE Nom='%s' AND Prenom='%s'", userName, userFirstName);
+    mysql_query(&mysql,sql_cmd);
+    MYSQL_RES * res = mysql_store_result(&mysql);
+    error = 1;
+  }while((long) mysql_affected_rows(&mysql) == 0);
+
+  strcat (directory, "./PDF/");
+  strcat (directory, userName);
+  strcat (directory, userFirstName);
 }
