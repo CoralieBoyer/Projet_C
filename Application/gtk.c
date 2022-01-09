@@ -9,7 +9,8 @@ void export(){
   char openDirectory[255] = "xdg-open ";
   strcat(openDirectory,directory);
   system(openDirectory);
-  system("xdg-open https://www.esgi.fr");
+  //closePdf();
+//  system("xdg-open https://www.esgi.fr");
 }
 
 static void finish(GtkWidget *widget, gpointer data){
@@ -24,6 +25,8 @@ static void finish(GtkWidget *widget, gpointer data){
   GtkWidget *buttonQuit;
   GtkWidget *buttonExport_box;
   GtkWidget *buttonExport;
+
+  closePdf();
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
@@ -85,6 +88,8 @@ static void lost(GtkWidget *widget, gpointer data){
   GtkWidget *buttonQuit;
   GtkWidget *buttonExport_box;
   GtkWidget *buttonExport;
+
+  closePdf();
 
   //BOXE PRINCIPALE
   principalBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 100);
@@ -210,7 +215,7 @@ static void quit (GtkWidget *widget, gpointer data){
   start = deleteIds(start);
   strcpy(where, "");
   found = 0;
-  closePdf();
+  //closePdf();
 }
 
 static void pauseWindow (GtkWidget *widget, gpointer data){
