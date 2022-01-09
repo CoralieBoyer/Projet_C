@@ -20,6 +20,9 @@ typedef struct Item {
 IdQuestion * start = NULL;
 
 /* VARIABLES GLOBALES */
+char userName[255] = "Nom1";
+char userFirstName[255] = "Prenom1";
+char directory[255] = "";
 //gtk.c
 int pagePause = 0;
 char phrase[255];
@@ -55,6 +58,19 @@ HPDF_Encoder encoding;
 //Ajouter les fichiers de modif
 
 int main (int argc, char **argv){
+  printf("BIENVUE DANS LE JEU 2vine_ki_C !\n");
+  printf("\nAvant de commencer :\n");
+
+  printf("Entrez votre nom de famille (sans espace)\n");
+  scanf("%s", userName);
+
+  printf("Entrez votre prenom (sans espace)\n");
+  scanf("%s", userFirstName);
+
+  strcat (directory, "./PDF/");
+  strcat (directory, userName);
+  strcat (directory, userFirstName);
+
   int status;
   play(status, argc, argv);
   return status;

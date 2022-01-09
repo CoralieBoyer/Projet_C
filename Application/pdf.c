@@ -19,13 +19,20 @@ error_handler  (HPDF_STATUS   error_no,
 
     //creation dossier
     struct stat st = {0};
-
-    if (stat("./tests", &st) == -1) {
-        mkdir("./tests", 0700); //id employe
+    if (stat(directory, &st) == -1) {
+	mkdir(directory, 0700); //id employe
     }
 
+    //recup id max fichier dans la bdd
+    mysql_query(&mysql,"SELECT MAX(id)+1 FROM FICHIER");
+    MYSQL_RES * res = mysql_store_result(&mysql);
+    row = mysql_fetch_row(res);
+
     //nommer fic
-    strcpy (fname, "PDF/test"); //id max + 1 fichier + date
+    //strcpy (fname, "./PDF/");
+    strcat (fname, directory);
+    strcat (fname,"/fic");
+    strcat (fname, row[0]); //AJOUTER LA DATE A LA FIN DU NOM
     strcat (fname, ".pdf");
 
     pdf = HPDF_New (error_handler, NULL);//voir si erreur lors de la recuperation des header
@@ -39,7 +46,7 @@ error_handler  (HPDF_STATUS   error_no,
     page = HPDF_AddPage (pdf);//ajouter page a doc
 
     //taile pdf
-    HPDF_Page_SetWidth (page, 200);//(y)
+    HPDF_Page_SetWidth (page, 300);//(y)
     HPDF_Page_SetHeight (page, 500);//(x)
 
     //titre pdf

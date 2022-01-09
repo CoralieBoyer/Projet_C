@@ -6,9 +6,10 @@ static void quit (GtkWidget *widget, gpointer data);
 //func
 
 void export(){
-  closePdf();
-  system("xdg-open ./PDF");
-  printf("ok\n");
+  char openDirectory[255] = "xdg-open ";
+  strcat(openDirectory,directory);
+  system(openDirectory);
+  system("xdg-open https://www.esgi.fr");
 }
 
 static void finish(GtkWidget *widget, gpointer data){

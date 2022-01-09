@@ -12,9 +12,9 @@ int main(void)
   if(curl) {
     curl_easy_setopt(curl, CURLOPT_URL, "https://www.esgi.fr/");
 
- 
+
   curl_global_init(CURL_GLOBAL_DEFAULT);
- 
+
   curl = curl_easy_init();
   if(curl) {
     curl_easy_setopt(curl, CURLOPT_URL, "https://www.esgi.fr/");
