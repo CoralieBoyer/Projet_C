@@ -150,7 +150,7 @@ void insert_element(char* name_table){
 
 	char sql_cmd[2000];
 	sprintf(sql_cmd,"DESC %s",name_table);
-        
+
 	mysql_query(&mysql,sql_cmd);
         MYSQL_RES * res = mysql_store_result(&mysql);
 	row = mysql_fetch_row(res);
@@ -176,12 +176,22 @@ void insert_element(char* name_table){
 		tmp[i]=malloc(sizeof(char)*255); //valeurs a inserer
 		do{
 			my_fgets(tmp[i],255);
-			if((strstr(name_table,"AGE") != NULL || strstr(name_table,"TAILLE")!= NULL) && i>0){
+			if(strstr(name_table,"AGE") != NULL || strstr(name_table,"TAILLE")!= NULL){
 				error=0;
-				strncpy(val1,value+1,strlen(value)-2);//pour convertir value en int
-				if(atoi(val1)>=atoi(tmp[i]) || atoi(tmp[i])<0 ){
+				if(i == 0){
+					if(atoi(tmp[i])<=0){
 					printf("vous devez saisir val2>val1 ou val1 != val2 ou avec val1 et val2 tout deux positif \n");
-					error =1;
+                                        error =1;
+					printf("val1: ");
+					}
+				}
+				else{
+					strncpy(val1,value+1,strlen(value)-2);//pour convertir value en int
+					if(atoi(val1)>=atoi(tmp[i]) || atoi(tmp[i])<=0 ){
+						printf("vous devez saisir val2>val1 ou val1 != val2 ou avec val1 et val2 tout deux positif \n");
+						printf("val2: ");
+						error =1;
+					}
 				}
 			}
 		}while(error == 1);
