@@ -184,7 +184,8 @@ void insert_element(char* name_table){
 			if(error == 0 && (strstr(name_table,"AGE") != NULL || strstr(name_table,"TAILLE")!= NULL)){
 				if(i == 0){
 					if(atoi(tmp[i])<=0){
-						printf("vous devez saisir val2>val1 ou val1 != val2 ou avec val1 et val2 tout deux positif \n");                                        		error =1;
+						printf("vous devez saisir val2>val1 ou val1 != val2 ou avec val1 et val2 tout deux positif \n");
+				     		error =1;
 						printf("val1: ");
 					}
 				}
