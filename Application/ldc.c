@@ -1,3 +1,11 @@
+//a virer
+#include <string.h>
+#include <mysql.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "my_libsql.c"
+#include "co_deco_sql.c"
+
 void backOffice(){
 //var
 char name_table[10];
@@ -9,9 +17,9 @@ printf("Ici, vous pouvez ajouter/modifier/supprimer une information \n");
 
 printf("Voici les TABLES que vous pouvez modifier\n");
 printf_tables();
-clean_stdin();
+//clean_stdin();
 printf("Ou vous pouvez creer une nouvelle TABLE pour rajouter des informations\n");
-clean_stdin();
+//clean_stdin();
 do{
 printf("Voulez-vous modifier une TABLE deja existante (m) ou en creer une nouvelle (a): ");
 scanf("%c",&next);
@@ -45,7 +53,7 @@ if(next == 'm'){
 		//clean_stdin();
 		switch (next){
 			case 'a':
-				insert_element(name_table);
+				func_insert_element(name_table);
 				break;
 			case 'm':
 				modify_element(name_table);
@@ -62,4 +70,12 @@ if(next == 'm'){
 else if(next =='a'){
 	printf("ajout de table \n");
 }
+}
+
+
+int main(int argc, char** argv){
+	connect_bdd();
+	backOffice();
+	close_mysql();
+	return 0;
 }
