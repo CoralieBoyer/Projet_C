@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
+#include <libconfig.h>
 
 /* STRUCTURES */
 typedef struct Item {
@@ -19,6 +19,18 @@ typedef struct Item {
 IdQuestion * start = NULL;
 
 /* VARIABLES GLOBALES */
+//config
+  char path[255] = "";
+  //database
+  char database[4][7] = {
+                        "host",
+                        "user",
+                        "passwd",
+                        "name"
+                        };
+  char dbValues[4][255];
+
+
 char userName[255] = "Nom1";
 char userFirstName[255] = "Prenom1";
 char directory[255] = "";
@@ -57,14 +69,27 @@ char date[20] = "";
 #include "ldc.c"
 #include "questions.c"
 #include "gtk.c"
+#include "test.c"
 
 /* DEBUT DU PROGRAMME */
 void beforeStarting();
 
 int main (int argc, char **argv){
+  int configVar;
   int status;
 
-  connect_bdd();
+  configVar = configFunc();
+  if (configVar == 0){
+        printf("Erreur de configuration (app.cfg)\n");
+        return 0;
+  }
+
+  configVar = connect_bdd();
+  if (configVar == 1){
+        printf("Verifiez les informations de configuration à la base de données. (app.cfg)\n");
+        return 0;
+  }
+
 
   beforeStarting();
   play(status, argc, argv);
