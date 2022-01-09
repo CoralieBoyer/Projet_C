@@ -127,7 +127,6 @@ int id;
   		else
 			printf("suppression effectuee avec succes\n");
   	}
-
 }
 
 void func_insert_element(char* name_table){
@@ -349,15 +348,16 @@ void insert_employe(){
         mysql_query(&mysql,sql_cmd);
         MYSQL_RES * res = mysql_store_result(&mysql);
         row = mysql_fetch_row(res);
-        while((row = mysql_fetch_row(res)))
-                printf("ID |%s | %s |",row[0], row[1]);
+        while((row = mysql_fetch_row(res))){
+                printf("ID  ");
+		printf("|%s | %s |",row[0], row[1]);
+	}
         mysql_free_result(res);
 	sprintf(sql_cmd,"select * from %s",table_name);
         mysql_query(&mysql,sql_cmd);
         res = mysql_store_result(&mysql);
-        row = mysql_fetch_row(res);
         while((row = mysql_fetch_row(res)))
-                printf("\n%s  | %s |",row[0], row[1]);
+                printf("\n%s  | %s |%s",row[0], row[1],row[2]);
         mysql_free_result(res);
 		printf("\n");
 	do{
