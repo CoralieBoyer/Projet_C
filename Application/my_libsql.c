@@ -305,6 +305,7 @@ void insert_employe(){
 	char tmp[10]="";
 	char table_name[255]="";
 	char champs[520]="";
+	char row_gen[255]="";
 
 	clean_stdin();
 
@@ -348,17 +349,23 @@ void insert_employe(){
         mysql_query(&mysql,sql_cmd);
         MYSQL_RES * res = mysql_store_result(&mysql);
         row = mysql_fetch_row(res);
+        printf("ID  |");
         while((row = mysql_fetch_row(res))){
-                printf("ID  ");
-		printf("|%s | %s |",row[0], row[1]);
+		printf("%s |",row[0]);
 	}
         mysql_free_result(res);
 	sprintf(sql_cmd,"select * from %s",table_name);
         mysql_query(&mysql,sql_cmd);
         res = mysql_store_result(&mysql);
-        while((row = mysql_fetch_row(res)))
-                printf("\n%s  | %s |%s",row[0], row[1],row[2]);
-        mysql_free_result(res);
+
+        while((row = mysql_fetch_row(res))){
+		printf("\n");
+		for (int i=0 ; i < mysql_num_fields(res); i++)
+			printf("%s |", row[i]);
+		//printf("\n%s  | %s | %s ",row[0], row[1],row[2]);
+	}
+
+      mysql_free_result(res);
 		printf("\n");
 	do{
 		error=0;
