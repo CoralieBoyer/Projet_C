@@ -145,6 +145,8 @@ void insert_element(char* name_table){
         char value[500] = "";
 	int count=0;
 	int i = 0;
+	char val1[20]="";
+	int error =0;
 
 	char sql_cmd[2000];
 	sprintf(sql_cmd,"DESC %s",name_table);
@@ -172,7 +174,18 @@ void insert_element(char* name_table){
 		printf("%s : %s\n",row[0],row[1]); //affiche les noms et types des lignes
 
 		tmp[i]=malloc(sizeof(char)*255); //valeurs a inserer
-		my_fgets(tmp[i],255);
+		do{
+			my_fgets(tmp[i],255);
+			if((strstr(name_table,"AGE") != NULL || strstr(name_table,"TAILLE")!= NULL) && i>0){
+				error=0;
+				strncpy(val1,value+1,strlen(value)-2);//pour convertir value en int
+				if(atoi(val1)>=atoi(tmp[i]) || atoi(tmp[i])<0 ){
+					printf("vous devez saisir val2>val1 ou val1 != val2 ou avec val1 et val2 tout deux positif \n");
+					error =1;
+				}
+			}
+		}while(error == 1);
+
                 strcat(value,"'");
                 strcat(value,tmp[i]);
                 strcat(value,"'");
