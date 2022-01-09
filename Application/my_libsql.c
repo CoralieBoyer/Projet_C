@@ -15,6 +15,9 @@ void clean_stdin();//remplace fflush
 void printf_tables();
 void choose_table(char* name_table);
 void delete_element(char* name_table);
+void insert_employe();
+void insert_questions();
+//void insert_func_element(char* name_table);
 void insert_element(char* name_table);
 void modify_element(char* name_table);
 
@@ -126,8 +129,24 @@ int id;
 
 }
 
+//void insert_func_element(char* name_table){
+	//printf("%s",name_table);
+	/*switch(name_table) {
+		case "QUESTIONS":
+			insert_questions();
+			break;
+		case "EMPLOYE":
+			insert_employe();
+			break;
+		default:
+			insert_element(name_table);
+			break;
+	}*/
+//}
+
+
 void insert_element(char* name_table){
-	char** tmp;
+/*	char** tmp;
 	char champs[500] = "";
         char value[500] = "";
 	int count=0;
@@ -188,6 +207,17 @@ void insert_element(char* name_table){
                 printf("insersion effectuee avec succes\n");
 
         mysql_free_result(res);
+*/
+printf("ok");
+
+}
+
+void insert_questions(){
+	printf("ok");
+}
+
+void insert_employe(){
+	printf("ok");
 }
 
 void modify_element(char* name_table){

@@ -39,9 +39,7 @@ if(next == 'm'){
 	}
 	else if(next == 'o'){
 		printf("Voulez-vous ajouter (a),modifier (m) ou supprimer (s) un element ?: ");
-		clean_stdin();
 		scanf("%c",&next);
-
 		switch (next){
 			case 'a':
 				insert_element(name_table);
