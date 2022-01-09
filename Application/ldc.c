@@ -44,4 +44,3 @@ printf_tables();
 		}
 	}
 }
-

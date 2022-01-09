@@ -47,34 +47,34 @@ endobj
 stream
 BT
 /F1 20 Tf
-0 480 Td
+100 480 Td
 (2VINE_KI_C) Tj
 ET
 BT
 /F1 10 Tf
+220 460 Td
+(Date : 2022-01-09) Tj
+ET
+BT
+/F1 10 Tf
 0 460 Td
-(blabla) Tj
+(Joueur : Coralie Boyer) Tj
 ET
 BT
 /F1 10 Tf
-0 450 Td
-(non) Tj
+100 420 Td
+(La personne a ete trouvee ?) Tj
 ET
 BT
 /F1 10 Tf
-0 430 Td
-(Ceci est une question ?) Tj
-ET
-BT
-/F1 10 Tf
-0 420 Td
-(oui) Tj
+150 410 Td
+(Partie interompu) Tj
 ET
 
 endstream
 endobj
 7 0 obj
-200
+255
 endobj
 xref
 0 8
@@ -85,7 +85,7 @@ xref
 0000000184 00000 n
 0000000283 00000 n
 0000000459 00000 n
-0000000713 00000 n
+0000000768 00000 n
 trailer
 <<
 /Root 1 0 R
@@ -93,5 +93,5 @@ trailer
 /Size 8
 >>
 startxref
-732
+787
 %%EOF
