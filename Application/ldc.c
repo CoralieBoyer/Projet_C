@@ -20,15 +20,8 @@ printf_tables();
 //clean_stdin();
 printf("Ou vous pouvez creer une nouvelle TABLE pour rajouter des informations\n");
 //clean_stdin();
-do{
-printf("Voulez-vous modifier une TABLE deja existante (m) ou en creer une nouvelle (a): ");
-scanf("%c",&next);
-if(next == 'm' || next == 'a')
-	break;
-}while(next != 'm' || next !='a');
 
-if(next == 'm'){
-	clean_stdin();
+//if(next == 'm'){
 	choose_table(name_table);//renvoie le nom de la table select
 	scanf("%c",&next);
 	if(next == 'n'){
@@ -36,14 +29,10 @@ if(next == 'm'){
 			printf("Voulez-vous quitter (q) ou choisir une nouvelle table (c): ");
 			clean_stdin();
 			scanf("%c",&next);
-			if(next == 'q')
-                        	return;
-			if(next == 'c')
-				break;
-		}while(next != 'q' || next != 'c');
+		}while(next != 'q' && next != 'c');
 
         if(next == 'c'){
-            clean_stdin();
+            //clean_stdin();
             choose_table(name_table);}//a countinuer
 	}
 	else if(next == 'o'){
@@ -66,10 +55,6 @@ if(next == 'm'){
                         	break;
 		}
 	}
-}
-else if(next =='a'){
-	printf("ajout de table \n");
-}
 }
 
 
