@@ -127,7 +127,6 @@ int id;
   		else
 			printf("suppression effectuee avec succes\n");
   	}
-
 }
 
 void func_insert_element(char* name_table){
@@ -146,10 +145,12 @@ void insert_element(char* name_table){
         char value[500] = "";
 	int count=0;
 	int i = 0;
+	char val1[20]="";
+	int error =0;
 
 	char sql_cmd[2000];
 	sprintf(sql_cmd,"DESC %s",name_table);
-        
+
 	mysql_query(&mysql,sql_cmd);
         MYSQL_RES * res = mysql_store_result(&mysql);
 	row = mysql_fetch_row(res);
@@ -173,7 +174,33 @@ void insert_element(char* name_table){
 		printf("%s : %s\n",row[0],row[1]); //affiche les noms et types des lignes
 
 		tmp[i]=malloc(sizeof(char)*255); //valeurs a inserer
-		my_fgets(tmp[i],255);
+		do{
+			error=0;
+			my_fgets(tmp[i],255);
+			if(strlen(tmp[i]) == 0){
+				error=1;
+				printf("veuillez resaisir: ");
+			}
+			if(error == 0 && (strstr(name_table,"AGE") != NULL || strstr(name_table,"TAILLE")!= NULL)){
+				if(i == 0){
+					if(atoi(tmp[i])<=0){
+						printf("vous devez saisir val2>val1 ou val1 != val2 ou avec val1 et val2 tout deux positif \n");
+				     		error =1;
+						printf("val1: ");
+					}
+				}
+				else{
+					strncpy(val1,value+1,strlen(value)-2);//pour convertir value en int
+					if(atoi(val1)>=atoi(tmp[i]) || atoi(tmp[i])<=0 ){
+						printf("vous devez saisir val2>val1 ou val1 != val2 ou avec val1 et val2 tout deux positif \n");
+						printf("val2: ");
+						error =1;
+					}
+				}
+			}
+
+		}while(error == 1);
+
                 strcat(value,"'");
                 strcat(value,tmp[i]);
                 strcat(value,"'");
@@ -214,6 +241,7 @@ void insert_questions(){
 	char phrase[255]="";
 	char champs[255] = "Phrase";
 	char sql_cmd[2000];
+	int error;
 
 	printf("votre question est en rapport avec quelle table ?");
 	mysql_query(&mysql,"SHOW TABLES");
@@ -227,49 +255,53 @@ void insert_questions(){
 	}
 	mysql_free_result(res);
 
-	printf("selectionner le numero de la table a changer: ");
-	scanf("%d",&num_table);
+	do {
+		error=0;
+		printf("selectionner le numero de la table a changer: ");
+		scanf("%d",&num_table);
 
-	switch(num_table){
+		switch(num_table){
 
-	case 0:
-		strcpy(name_table,"AGE");
-		strcat(champs,",ID_AGE");
-		break;
-	case 1:
-		strcpy(name_table,"CHEVEUX");
-		strcat(champs,",ID_CHEVEUX");
-		break;
-	case 2:
-		strcpy(name_table,"PILOSITE");
-		strcat(champs,",ID_PILOSITE");
-		break;
-	case 3:
-		strcpy(name_table,"SEXE");
-		strcat(champs,",ID_SEXE");
-		break;
-	case 4:
-		strcpy(name_table,"TAILLE");
-		strcat(champs,",ID_TAILLE");
-		break;
-	case 5:
-		strcpy(name_table,"TRAVAIL");
-		strcat(champs,",ID_TRAVAIL");
-		break;
-	case 6:
-		strcpy(name_table,"YEUX");
-		strcat(champs,",ID_YEUX");
-		break;
-	default:
-		printf("erreur de saisie");
-	}
+		case 0:
+			strcpy(name_table,"AGE");
+			strcat(champs,",ID_AGE");
+			break;
+		case 1:
+			strcpy(name_table,"CHEVEUX");
+			strcat(champs,",ID_CHEVEUX");
+			break;
+		case 2:
+			strcpy(name_table,"PILOSITE");
+			strcat(champs,",ID_PILOSITE");
+			break;
+		case 3:
+			strcpy(name_table,"SEXE");
+			strcat(champs,",ID_SEXE");
+			break;
+		case 4:
+			strcpy(name_table,"TAILLE");
+			strcat(champs,",ID_TAILLE");
+			break;
+		case 5:
+			strcpy(name_table,"TRAVAIL");
+			strcat(champs,",ID_TRAVAIL");
+			break;
+		case 6:
+			strcpy(name_table,"YEUX");
+			strcat(champs,",ID_YEUX");
+			break;
+		default:
+			printf("table inconnu, veuillez recommencer\n");
+			error=1;
+		}
+	}while(error ==1);
 	printf("%s",champs);
 	insert_element(name_table);
 	do{
-	printf("Entrez la question que vous voulez poser sans mettre d'accent ni d'apostrophe (veuillez reprendre les informations que vous avez saisie plus haut)\n");
-	printf("Ex: Est-ce que votre personne a les yeux bleue?\n");
-	my_fgets(phrase,255);
-	}while(strstr(phrase,"'") != NULL);
+		printf("Entrez la question que vous voulez poser sans mettre d'accent ni d'apostrophe (veuillez reprendre les informations que vous avez saisie plus haut)\n");
+		printf("Ex: Est-ce que votre personne a les yeux bleue?\n");
+		my_fgets(phrase,255);
+	}while(strlen(phrase) == 0 || strstr(phrase,"'") != NULL);
 	strcat(value,phrase);
 	strcat(value,"'");
 
@@ -306,18 +338,34 @@ void insert_employe(){
 	char tmp[10]="";
 	char table_name[255]="";
 	char champs[520]="";
+	char row_gen[255]="";
 
 	clean_stdin();
 
 	//ajout nom
-	printf("Entrez le nom de l'employe\n");
-	my_fgets(name,255);
+	do{
+		error=0;
+		printf("Entrez le nom de l'employe\n");
+		my_fgets(name,255);
+		if(strlen(name) == 0 || strstr(name,"'")){
+			printf("veuiller saisir une valeur sans apostrophe ou non vide\n");
+			error=1;
+		}
+	}while(error ==1);
 	strcat(value,name);
 	strcat(value,"',");
 
 	//ajout prenom
-	printf("Entrez le prenom de l'employe\n");
-	my_fgets(name,255);
+	do{
+		error=0;
+		printf("Entrez le prenom de l'employe\n");
+		my_fgets(name,255);
+		if(strlen(name) == 0 || strstr(name,"'")){
+                        printf("veuiller saisir une valeur sans apostrophe ou non vide\n");
+                        error=1;
+                }
+
+	}while(error==1);
 	strcat(value,"'");
         strcat(value,name);
         strcat(value,"',");
@@ -349,16 +397,22 @@ void insert_employe(){
         mysql_query(&mysql,sql_cmd);
         MYSQL_RES * res = mysql_store_result(&mysql);
         row = mysql_fetch_row(res);
-        while((row = mysql_fetch_row(res)))
-                printf("ID |%s | %s |",row[0], row[1]);
+        printf("ID  |");
+        while((row = mysql_fetch_row(res))){
+		printf("%s |",row[0]);
+	}
         mysql_free_result(res);
 	sprintf(sql_cmd,"select * from %s",table_name);
         mysql_query(&mysql,sql_cmd);
         res = mysql_store_result(&mysql);
-        row = mysql_fetch_row(res);
-        while((row = mysql_fetch_row(res)))
-                printf("\n%s  | %s |",row[0], row[1]);
-        mysql_free_result(res);
+
+        while((row = mysql_fetch_row(res))){
+		printf("\n");
+		for (int i=0 ; i < mysql_num_fields(res); i++)
+			printf("%s |", row[i]);
+	}
+
+      mysql_free_result(res);
 		printf("\n");
 	do{
 		error=0;
@@ -399,9 +453,6 @@ void insert_employe(){
                 printf("insersion effectuee avec succes\n");
 
 	mysql_free_result(res);
-
-
-
 }
 
 void modify_element(char* name_table){
@@ -409,6 +460,7 @@ void modify_element(char* name_table){
 	char champs[255] = "";
         char tmp[255] = "";
 	char value[255] = "";
+	int error;
 
 	printf("Entrez l'ID de l'element a modifier \n"); //ligne a modifier
         clean_stdin();
@@ -425,12 +477,26 @@ void modify_element(char* name_table){
                 printf("%s | %s\n",row[0], row[1]);
 	mysql_free_result(res);
 
-	printf("Entrez le nom de la ligne a modifier\n");
-        clean_stdin();
-	my_fgets(champs,255);
+	clean_stdin();
+	do{
+		error=0;
+		printf("Entrez le nom de la ligne a modifier\n");
+		my_fgets(champs,255);
+		if(strlen(champs)==0){
+			error=1;
+			printf("veuillez saisir une val\n");
+		}
+	}while(error==1);
 
-        printf("Entrez la nouvelle valeur\n");
-        my_fgets(tmp,255);
+	do{
+		error=0;
+        	printf("Entrez la nouvelle valeur\n");
+        	my_fgets(tmp,255);
+		if(strlen(tmp)==0){
+                        error=1;
+                        printf("veuillez saisir une val\n");
+                }
+	}while(error==1);
         strcat(value,"'");
         strcat(value,tmp);
         strcat(value,"'");
