@@ -122,10 +122,10 @@ void requete(){
 char sql_cmd[2000];
 //printf("%s\n",id_element);
 			if(strlen(where)!=0){
-			strcat(where,"AND");
+			strcat(where," AND ");
 			}
 			strcat(where,id_fk);
-			strcat(where,"=");
+			strcat(where," = ");
 			strcat(where,id_element);
 			sprintf(sql_cmd,"SELECT * FROM EMPLOYE where %s",where);
                         mysql_query(&mysql,sql_cmd);
