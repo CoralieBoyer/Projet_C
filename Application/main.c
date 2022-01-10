@@ -69,7 +69,7 @@ char date[20] = "";
 #include "ldc.c"
 #include "questions.c"
 #include "gtk.c"
-#include "test.c"
+#include "config.c"
 
 /* DEBUT DU PROGRAMME */
 void beforeStarting();
