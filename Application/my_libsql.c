@@ -460,6 +460,7 @@ void modify_element(char* name_table){
 	char champs[255] = "";
         char tmp[255] = "";
 	char value[255] = "";
+	int error;
 
 	printf("Entrez l'ID de l'element a modifier \n"); //ligne a modifier
         clean_stdin();
@@ -476,12 +477,26 @@ void modify_element(char* name_table){
                 printf("%s | %s\n",row[0], row[1]);
 	mysql_free_result(res);
 
-	printf("Entrez le nom de la ligne a modifier\n");
-        clean_stdin();
-	my_fgets(champs,255);
+	clean_stdin();
+	do{
+		error=0;
+		printf("Entrez le nom de la ligne a modifier\n");
+		my_fgets(champs,255);
+		if(strlen(champs)==0){
+			error=1;
+			printf("veuillez saisir une val\n");
+		}
+	}while(error==1);
 
-        printf("Entrez la nouvelle valeur\n");
-        my_fgets(tmp,255);
+	do{
+		error=0;
+        	printf("Entrez la nouvelle valeur\n");
+        	my_fgets(tmp,255);
+		if(strlen(tmp)==0){
+                        error=1;
+                        printf("veuillez saisir une val\n");
+                }
+	}while(error==1);
         strcat(value,"'");
         strcat(value,tmp);
         strcat(value,"'");
