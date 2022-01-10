@@ -72,7 +72,7 @@ char date[20] = "";
 #include "config.c"
 
 /* DEBUT DU PROGRAMME */
-void beforeStarting();
+//void beforeStarting();
 
 int main (int argc, char **argv){
   int configVar;

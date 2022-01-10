@@ -64,6 +64,8 @@ error_handler  (HPDF_STATUS   error_no,
     HPDF_Page_ShowText (page, tmp);//text a afficher
     HPDF_Page_EndText (page);
 
+
+
     strcpy(tmp,"Joueur : ");
     strcat(tmp, userFirstName);
     strcat(tmp, " ");
@@ -139,9 +141,7 @@ void closePdf(char *answer){
     if(answer == "oui"){
 
       strcpy(tmp,"Reponse : ");
-      strcat(tmp, userFirstName);
-      strcat(tmp, " ");
-      strcat(tmp, userName);
+      strcat(tmp, name);
       x-=15;
       HPDF_Page_BeginText (page);//creation zone de texte
       HPDF_Page_SetFontAndSize (page, font, 10);

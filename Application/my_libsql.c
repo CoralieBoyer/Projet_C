@@ -121,7 +121,7 @@ int id;
   		mysql_query(&mysql,sql_cmd);
 
   		if((long) mysql_affected_rows(&mysql) == 0)
-                	printf("aucune information supprimes\n");
+                	printf("aucune information supprimee\n");
   		else if((long) mysql_affected_rows(&mysql) == -1)
                 	printf("erreur lors de la suppression\n");
   		else
