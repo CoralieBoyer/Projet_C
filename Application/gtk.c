@@ -285,7 +285,7 @@ static void pauseWindow (GtkWidget *widget, gpointer data){
   gtk_widget_set_size_request(buttonQuit,300,50);
 
   //TITRE
-  title=gtk_label_new("¿2vine ki C?");
+  title=gtk_label_new(appName);
   gtk_container_add(GTK_CONTAINER(principalBox), title);
   gtk_widget_set_margin_top(title,10); //AJOUT DE MARGE EN HAUT
 //  gtk_widget_set_size_request(title,300,50); //TAILLE
@@ -394,8 +394,10 @@ static void close_window (GtkWidget *widget, gpointer data){
   backOffice();
 }
 
-void entrepriseLink(){
-  system("xdg-open https://www.esgi.fr");
+void entrepriseSearchLink(){
+  char command[255] = "xdg-open ";
+  strcat (command,entrepriseLink);
+  system(command);
 }
 
 static void homeWindow (GtkWidget *THEwindow, gpointer data){
@@ -417,7 +419,7 @@ static void homeWindow (GtkWidget *THEwindow, gpointer data){
   gtk_container_add(GTK_CONTAINER(window), principalBox);
 
   //TITRE
-  title=gtk_label_new("¿2vine ki C?");
+  title=gtk_label_new(appName);
   gtk_container_add(GTK_CONTAINER(principalBox), title);
   gtk_widget_set_margin_top(title,10); //AJOUT DE MARGE EN HAUT
 //  gtk_widget_set_size_request(title,300,50); //TAILLE
@@ -463,7 +465,7 @@ static void homeWindow (GtkWidget *THEwindow, gpointer data){
   gtk_container_add (GTK_CONTAINER (principalBox), buttonLink_box);
 
   buttonLink = gtk_button_new_with_mnemonic ("Voir le site de l'entreprise.");
-  g_signal_connect (buttonLink, "clicked", G_CALLBACK (entrepriseLink), NULL);
+  g_signal_connect (buttonLink, "clicked", G_CALLBACK (entrepriseSearchLink), NULL);
   gtk_container_add (GTK_CONTAINER (buttonLink_box), buttonLink);
   gtk_widget_set_size_request(buttonLink,30,10);
   gtk_widget_set_margin_start(buttonLink,500);
@@ -478,7 +480,7 @@ static void activate (GtkApplication *app, gpointer user_data){
 
   //FENETRE
   window = gtk_application_window_new (app);
-  gtk_window_set_title (GTK_WINDOW (window), "2vine ki C");
+  gtk_window_set_title (GTK_WINDOW (window), appName);
   gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
@@ -519,7 +521,7 @@ void beforeStarting(){
   char sql_cmd[2000];
   int error = 0;
 
-  printf("BIENVENUE DANS LE JEU 2vine_ki_C !\n");
+  printf("BIENVENUE DANS LE JEU %s !\n", appName);
   printf("\nAvant de commencer :\n");
 
   do{

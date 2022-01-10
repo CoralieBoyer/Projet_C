@@ -13,10 +13,16 @@ int configFunc(){
   }
 
   /* NOM DE L'APPLICATION */
+  if(config_lookup_string(&cfg, "name", &str))
+      strcpy(appName,str);
+    else
+      return 0;
 
   /* NOM DE L'ENTREPRISE */
-
-
+  if(config_lookup_string(&cfg, "entreprise", &str))
+      strcpy(entrepriseName,str);
+    else
+      return 0;
 
   /*BASE DE DONNEES */
   for (int i = 0; i < 4; i++){
@@ -28,5 +34,21 @@ int configFunc(){
     else
       return 0;
   }
+return 2;
+}
+
+int configLink(){
+  char sql_cmd[2000];
+
+  sprintf(sql_cmd,"SELECT Lien FROM ENTREPRISE WHERE Nom = '%s'", entrepriseName);
+  mysql_query(&mysql,sql_cmd);
+  MYSQL_RES * res = mysql_store_result(&mysql);
+  row = mysql_fetch_row(res);
+
+  if((long) mysql_affected_rows(&mysql) == -1 || (long) mysql_affected_rows(&mysql) == 0)
+    return -1;
+  else
+    strcpy(entrepriseLink,row[0]);
+
 return 2;
 }

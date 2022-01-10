@@ -20,16 +20,20 @@ IdQuestion * start = NULL;
 
 /* VARIABLES GLOBALES */
 //config
-  char path[255] = "";
+  //nom app
+char appName[255] = "";
+  //nom/lien entreprise
+char entrepriseName[255] = "";
+char entrepriseLink[255] = "";
   //database
-  char database[4][7] = {
+char path[255] = "";
+char database[4][7] = {
                         "host",
                         "user",
                         "passwd",
                         "name"
                         };
-  char dbValues[4][255];
-
+char dbValues[4][255];
 
 char userName[255] = "Nom1";
 char userFirstName[255] = "Prenom1";
@@ -90,6 +94,11 @@ int main (int argc, char **argv){
         return 0;
   }
 
+  configVar = configLink();
+  if (configVar == -1){
+        printf("Verifiez les informations de configuration pour le nom de l'entreprise. (app.cfg)\n");
+        return 0;
+  }
 
   beforeStarting();
   play(status, argc, argv);
